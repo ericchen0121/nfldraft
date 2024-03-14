@@ -4,15 +4,19 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { HashRouter as Router } from 'react-router-dom' // gh-pages doesn't support browser history: https://blog.logrocket.com/deploying-react-apps-github-pages/
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
-  <Router>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </Router>
+  <QueryClientProvider client={queryClient}>
+    <Router>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </Router>
+  </QueryClientProvider>
 )
 
 // If you want to start measuring performance in your app, pass a function

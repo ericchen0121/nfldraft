@@ -1,9 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import roundPickTeams from '../data/roundPickTeams'
-import axios from 'axios'
 import teamAbbreviationToId from '../utilities/teamAbbreviationToId'
+import usePickPlayerStore from '../store/usePickPlayerStore'
+import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
+import { Pick } from '../types/Pick'
 
-const sortArrayValuesByDate = (a: any, b: any) => {
+interface IncludesDate {
+  date: string
+}
+
+const sortArrayValuesByDate = (a: IncludesDate, b: IncludesDate) => {
   var dateA = new Date(a.date)
   var dateB = new Date(b.date)
 
@@ -17,25 +23,22 @@ const sortArrayValuesByDate = (a: any, b: any) => {
 }
 
 const Home = () => {
-  const [round, setRound] = useState(1)
-  const [roundPick, setRoundPick] = useState(1)
-  const abbreviation = roundPickTeams[1][roundPick - 1].team_abbreviation
-  const team_id = teamAbbreviationToId(abbreviation)
-  const [mocks, setMocks] = useState<any[]>([])
-  const mockPicks = mocks
+  const { players, round, roundPick, setRoundPick, setPlayers } =
+    usePickPlayerStore()
+  const abbreviation: string =
+    roundPickTeams[1][roundPick - 1].team_abbreviation
+  const teamId = teamAbbreviationToId(abbreviation)
+  const { data } = usePlayerByTeamIdQuery(teamId)
+
+  const mockPicks = players
     .filter((m) => m?.round_pick === roundPick)
     .sort(sortArrayValuesByDate)
 
   useEffect(() => {
-    axios
-      .get(
-        `https://7fnpc6l8dh.execute-api.us-west-1.amazonaws.com/dev/teams?team_id=${team_id}`
-      )
-      .then((response) => {
-        setMocks(JSON.parse(response.data.body).data)
-      })
-      .catch((err) => console.log(err))
-  }, [roundPick])
+    if (data) {
+      setPlayers(data)
+    }
+  }, [data])
 
   const iconByAbbreviation = (abbrev: string) => {
     const abbreviationToUse = abbrev === 'JAC' ? 'JAX' : abbrev
@@ -47,7 +50,7 @@ const Home = () => {
     )
   }
 
-  const PickDisplayRow = ({ pick }: { pick: any }) => {
+  const PickDisplayRow = ({ pick }: { pick: Pick }) => {
     const analysisDate = new Date(pick.date)
     return (
       <div
@@ -57,22 +60,25 @@ const Home = () => {
           alignItems: 'start',
           justifyContent: 'flex-start',
           marginBottom: 8,
+          width: '100vw',
         }}
       >
         <div style={{ width: 200, flexDirection: 'row', display: 'flex' }}>
           <div>
             <img
-              style={{ width: 48, height: 48 }}
-              src={`https://static.www.nfl.com/image/private/f_png,q_100,h_240,w_240,c_fill,g_face:center,f_auto/%7B%7Binstance%7D%7D/god-draft-headshots/2024/${pick?.image?.nfl_id}`}
+              style={{ width: 48, height: 48, marginLeft: 12, marginRight: 12 }}
+              src={`https://static.www.nfl.com/image/private/f_png,q_100,h_120,w_120,c_fill,g_face:center,f_auto/%7B%7Binstance%7D%7D/god-draft-headshots/2024/${pick?.image?.nfl_id}`}
             />
           </div>
           <div style={{ width: 250 }}>
-            <div style={{ fontSize: 12 }}>{pick.name}</div>
+            <div style={{ fontSize: 14 }}>{pick.name}</div>
             <div style={{ fontSize: 9 }}>{pick.school}</div>
           </div>
           <div style={{ fontSize: 18 }}>{pick.position}</div>
         </div>
-        <div style={{ marginLeft: 12 }}>
+        <div
+          style={{ marginLeft: 12, display: 'flex', flexDirection: 'column' }}
+        >
           <div style={{ fontSize: 12 }}>{pick.analysis}</div>
           <div style={{ fontSize: 10 }}>
             -{pick.analyst} {analysisDate.getMonth() + 1}/
@@ -98,7 +104,7 @@ const Home = () => {
     >
       <div
         className='top-container'
-        style={{ display: 'flex', marginBottom: 'auto' }}
+        style={{ display: 'flex', marginBottom: 'auto', marginTop: 100 }}
       >
         <div>
           {mockPicks.map((mock) => {
@@ -112,9 +118,15 @@ const Home = () => {
           width: '100%',
           flexDirection: 'row',
           height: 150,
+          alignItems: 'center',
         }}
       >
-        <div>NFL MOCK</div>
+        <div>
+          <img
+            src='https://static.www.nfl.com/image/upload/v1554321393/league/nvfr7ogywskqrfaiu38m.svg'
+            style={{ height: 90, width: 90 }}
+          />
+        </div>
         <div
           style={{
             width: 120,
@@ -144,7 +156,7 @@ const Home = () => {
                   onClick={() => {
                     setRoundPick(number + 1)
                   }}
-                  style={{ margin: 4 }}
+                  style={{ margin: 4, cursor: 'pointer' }}
                 >
                   {number + 1}
                 </div>

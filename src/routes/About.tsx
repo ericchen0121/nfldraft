@@ -3,7 +3,7 @@ import React from 'react'
 const About = () => {
   return (
     <>
-      <div>what about it</div>
+      <div className='font-bold underline'>what about it</div>
     </>
   )
 }
