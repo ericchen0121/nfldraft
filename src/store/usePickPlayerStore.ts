@@ -16,7 +16,7 @@ const usePickPlayerStore = create<PickPlayerStore>((set) => ({
   players: [],
   setRound: (round: number) => set(() => ({ round })),
   setRoundPick: (roundPick: number) => set(() => ({ roundPick })),
-  setPlayers: (players: Pick[] | any) => set(() => ({ players })),
+  setPlayers: (players: Pick[]) => set(() => ({ players })),
 }))
 
 export default usePickPlayerStore

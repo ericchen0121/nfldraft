@@ -28,17 +28,17 @@ const Home = () => {
   const abbreviation: string =
     roundPickTeams[1][roundPick - 1].team_abbreviation
   const teamId = teamAbbreviationToId(abbreviation)
-  const { data } = usePlayerByTeamIdQuery(teamId)
+  const playerByTeamIdQuery = usePlayerByTeamIdQuery(teamId) // https://tkdodo.eu/blog/react-query-and-type-script
 
   const mockPicks = players
     .filter((m) => m?.round_pick === roundPick)
     .sort(sortArrayValuesByDate)
 
   useEffect(() => {
-    if (data) {
-      setPlayers(data)
+    if (playerByTeamIdQuery.isSuccess) {
+      setPlayers(playerByTeamIdQuery.data)
     }
-  }, [data])
+  }, [playerByTeamIdQuery.isSuccess])
 
   const iconByAbbreviation = (abbrev: string) => {
     const abbreviationToUse = abbrev === 'JAC' ? 'JAX' : abbrev
