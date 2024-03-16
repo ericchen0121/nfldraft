@@ -5,6 +5,9 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { HashRouter as Router } from 'react-router-dom' // gh-pages doesn't support browser history: https://blog.logrocket.com/deploying-react-apps-github-pages/
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import './fonts/BarlowCondensed-Bold.ttf'
+import './fonts/BarlowCondensed-Medium.ttf'
+import './fonts/BarlowCondensed-Regular.ttf'
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
