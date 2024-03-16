@@ -1,11 +1,12 @@
 import React from 'react'
 import usePickPlayerStore from '../store/usePickPlayerStore'
 import TeamIconById from '../atoms/TeamIconById'
+import teamColors from '../utilities/teamColors'
 
 const About = () => {
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
-    players,
+    players: allMocksByTeam,
     order,
     playersByRoundAndPick,
     round,
@@ -14,21 +15,36 @@ const About = () => {
     setPlayers,
   } = usePickPlayerStore()
 
-  console.log(playersByRoundAndPick, order)
+  console.log('playersbyround', allMocksByTeam)
   return (
     <div className='snap-x snap-mandatory h-screen w-screen flex overflow-y-hidden'>
       {order.map((order) => {
-        const analyses = players.filter(
+        const analyses = allMocksByTeam.filter(
           (mock) => mock.player_id === Number(order)
         )
         const player = analyses[0]
+        const colors = teamColors(player.team_id)
+
+        // stats
+        // Other players at position mocked
+        // % Analysts mock
+
+        // find total mock picks at the position
+        const allMocksAtPick = allMocksByTeam.filter(
+          (m) => m.round === player.round && m.round_pick === player.round_pick
+        )
+        const allMocksForPlayer = allMocksAtPick.filter(
+          (m) => m.player_id === player.player_id
+        )
+
+        console.log((allMocksForPlayer.length / allMocksAtPick.length) * 100)
 
         return (
           <div className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'>
             <div className='grid grid-cols-4 grid-rows-6 gap-4 w-screen'>
               <div className='col-span-2' />
               <div>
-                <div className='grid grid-rows-2 gap-4'>
+                <div className='grid grid-rows-2'>
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={{ marginRight: 12 }}>
                       <div
@@ -67,6 +83,7 @@ const About = () => {
                       </div>
                     </div>
                   </div>
+                  <div style={{ fontSize: 10 }}>{player.extra_info}</div>
                 </div>
               </div>
               <div>
@@ -91,8 +108,8 @@ const About = () => {
                       maxWidth: 200,
                       transformOrigin: '100% 0',
                       transform: 'skewX(-15deg)',
-                      backgroundColor: 'blue',
-                      borderRight: '2rem solid red',
+                      backgroundColor: colors[0],
+                      borderRight: `2rem solid ${colors[1]}`,
                       zIndex: 1,
                     }}
                   ></div>
@@ -142,24 +159,57 @@ const About = () => {
                   />
                 </div>
               </div>
-              <div className='col-span-4'>
-                <div className='grid grid-rows-3 grid-flow-col gap-4'>
-                  <div className='row-span-3'></div>
-                  <div className='col-span-2'>{player.name}</div>
-                  <div className='row-span-2 col-span-2'>{player.position}</div>
+              <div className='col-span-2 md:col-span-1'>
+                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
+                  <div className='text-slate-700'>
+                    <span className='text-4xl'>
+                      {Math.floor(
+                        (allMocksForPlayer.length / allMocksAtPick.length) * 100
+                      )}
+                      %
+                    </span>
+                  </div>
+                  <div className='text-xs text-slate-500'>
+                    {allMocksForPlayer.length} of {allMocksAtPick.length} mock
+                    drafts select {player.name} at Pick {player.round_pick}
+                  </div>
                 </div>
-              </div>
-              <div
-                className='col-span-4'
-                style={{ backgroundColor: 'yellow', height: 80 }}
-              >
-                <div
-                  className='snap-x snap-mandatory w-screen flex overflow-y-hidden'
-                  style={{ height: 80 }}
-                >
+                <div className='snap-x snap-mandatory w-screen flex overflow-y-hidden'>
                   {analyses.map((analysis) => (
-                    <div className='snap-always flex-shrink-0 snap-start w-screen flex'>
-                      {analysis.analysis}
+                    <div className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'>
+                      <div className='p-8 relative border border-sky-400 rounded-2xl m-2'>
+                        <span
+                          style={{
+                            fontFamily: 'Lato-Italic',
+                            fontSize: 40,
+                            lineHeight: 0.7,
+                            color: colors[1],
+                            position: 'absolute',
+                            top: 28,
+                            left: 8,
+                          }}
+                        >
+                          "
+                        </span>
+                        <span
+                          style={{
+                            fontFamily: 'Lato-Regular',
+                            fontSize: 15,
+                          }}
+                        >
+                          {analysis.analysis}
+                        </span>
+                        <footer className='mt-4'>
+                          <span
+                            style={{
+                              fontFamily: 'Lato-Regular',
+                              fontSize: 12,
+                            }}
+                          >
+                            {analysis.analyst}
+                          </span>
+                        </footer>
+                      </div>
                     </div>
                   ))}
                 </div>

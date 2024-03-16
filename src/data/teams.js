@@ -5,6 +5,8 @@ export default [
     name: 'Cardinals',
     full_name: 'Arizona Cardinals',
     abbreviation: 'ARI',
+    primaryColor: '#97233F',
+    secondaryColor: '#000000',
   },
   {
     team_id: 2,
@@ -12,6 +14,9 @@ export default [
     name: 'Falcons',
     full_name: 'Atlanta Falcons',
     abbreviation: 'ATL',
+
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 3,
@@ -19,6 +24,8 @@ export default [
     name: 'Ravens',
     full_name: 'Baltimore Ravens',
     abbreviation: 'BAL',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 4,
@@ -26,6 +33,8 @@ export default [
     name: 'Bills',
     full_name: 'Buffalo Bills',
     abbreviation: 'BUF',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 5,
@@ -33,6 +42,8 @@ export default [
     name: 'Panthers',
     full_name: 'Carolina Panthers',
     abbreviation: 'CAR',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 6,
@@ -40,6 +51,8 @@ export default [
     name: 'Bears',
     full_name: 'Chicago Bears',
     abbreviation: 'CHI',
+    primaryColor: '#0B162A',
+    secondaryColor: '#C83803',
   },
   {
     team_id: 7,
@@ -47,6 +60,8 @@ export default [
     name: 'Bengals',
     full_name: 'Cincinnati Bengals',
     abbreviation: 'CIN',
+    primaryColor: '#FB4F14',
+    secondaryColor: '#000000',
   },
   {
     team_id: 8,
@@ -54,6 +69,8 @@ export default [
     name: 'Browns',
     full_name: 'Cleveland Browns',
     abbreviation: 'CLE',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 9,
@@ -61,6 +78,8 @@ export default [
     name: 'Cowboys',
     full_name: 'Dallas Cowboys',
     abbreviation: 'DAL',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 10,
@@ -68,6 +87,8 @@ export default [
     name: 'Broncos',
     full_name: 'Denver Broncos',
     abbreviation: 'DEN',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 11,
@@ -75,6 +96,8 @@ export default [
     name: 'Lions',
     full_name: 'Detroit Lions',
     abbreviation: 'DET',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 12,
@@ -82,6 +105,8 @@ export default [
     name: 'Packers',
     full_name: 'Green Bay Packers',
     abbreviation: 'GB',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 13,
@@ -89,6 +114,8 @@ export default [
     name: 'Texans',
     full_name: 'Houston Texans',
     abbreviation: 'HOU',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 14,
@@ -96,6 +123,8 @@ export default [
     name: 'Colts',
     full_name: 'Indianapolis Colts',
     abbreviation: 'IND',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 15,
@@ -103,6 +132,8 @@ export default [
     name: 'Jaguars',
     full_name: 'Jacksonville Jaguars',
     abbreviation: 'JAC',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 16,
@@ -110,6 +141,8 @@ export default [
     name: 'Chiefs',
     full_name: 'Kansas City Chiefs',
     abbreviation: 'KC',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 17,
@@ -117,6 +150,8 @@ export default [
     name: 'Raiders',
     full_name: 'Las Vegas Raiders',
     abbreviation: 'LV',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 18,
@@ -124,6 +159,8 @@ export default [
     name: 'Chargers',
     full_name: 'Los Angeles Chargers',
     abbreviation: 'LAC',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 19,
@@ -131,6 +168,8 @@ export default [
     name: 'Rams',
     full_name: 'Los Angeles Rams',
     abbreviation: 'LAR',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 20,
@@ -138,6 +177,8 @@ export default [
     name: 'Dolphins',
     full_name: 'Miami Dolphins',
     abbreviation: 'MIA',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 21,
@@ -145,6 +186,8 @@ export default [
     name: 'Vikings',
     full_name: 'Minnesota Vikings',
     abbreviation: 'MIN',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 22,
@@ -152,6 +195,8 @@ export default [
     name: 'Patriots',
     full_name: 'New England Patriots',
     abbreviation: 'NE',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 23,
@@ -159,6 +204,8 @@ export default [
     name: 'Saints',
     full_name: 'New Orleans Saints',
     abbreviation: 'NO',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 24,
@@ -166,6 +213,8 @@ export default [
     name: 'Giants',
     full_name: 'New York Giants',
     abbreviation: 'NYG',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 25,
@@ -173,6 +222,8 @@ export default [
     name: 'Jets',
     full_name: 'New York Jets',
     abbreviation: 'NYJ',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 26,
@@ -180,6 +231,8 @@ export default [
     name: 'Eagles',
     full_name: 'Philadelphia Eagles',
     abbreviation: 'PHI',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 27,
@@ -187,6 +240,8 @@ export default [
     name: 'Steelers',
     full_name: 'Pittsburgh Steelers',
     abbreviation: 'PIT',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 28,
@@ -194,6 +249,8 @@ export default [
     name: '49ers',
     full_name: 'San Francisco 49ers',
     abbreviation: 'SF',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 29,
@@ -201,6 +258,8 @@ export default [
     name: 'Seahawks',
     full_name: 'Seattle Seahawks',
     abbreviation: 'SEA',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 30,
@@ -208,6 +267,8 @@ export default [
     name: 'Buccaneers',
     full_name: 'Tampa Bay Buccaneers',
     abbreviation: 'TB',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 31,
@@ -215,6 +276,8 @@ export default [
     name: 'Titans',
     full_name: 'Tennessee Titans',
     abbreviation: 'TEN',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
   {
     team_id: 32,
@@ -222,6 +285,8 @@ export default [
     name: 'Commanders',
     full_name: 'Washington Commanders',
     abbreviation: 'WAS',
+    primaryColor: '#A71930',
+    secondaryColor: '#000000',
   },
 ]
 

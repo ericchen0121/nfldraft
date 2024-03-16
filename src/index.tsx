@@ -8,6 +8,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './fonts/BarlowCondensed-Bold.ttf'
 import './fonts/BarlowCondensed-Medium.ttf'
 import './fonts/BarlowCondensed-Regular.ttf'
+import './fonts/Lato-Regular.ttf'
+import './fonts/Lato-Italic.ttf'
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)

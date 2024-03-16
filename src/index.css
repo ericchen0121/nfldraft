@@ -33,3 +33,13 @@ code {
   src: local('BarlowCondensed-Regular'),
     url('./fonts/BarlowCondensed-Regular.ttf') format('truetype');
 }
+
+@font-face {
+  font-family: 'Lato-Regular';
+  src: local('Lato-Regular'), url('./fonts/Lato-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato-Italic';
+  src: local('Lato-Italic'), url('./fonts/Lato-Italic.ttf') format('truetype');
+}
