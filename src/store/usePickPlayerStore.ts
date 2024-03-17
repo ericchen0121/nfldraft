@@ -14,12 +14,18 @@ interface GroupedPlayerId {
   [key: number]: Pick[]
 }
 
+interface RoundPickPlayer {
+  round: number
+  roundPick: number
+  playerId: number
+}
+
 interface PickPlayerStore {
   round: number
   roundPick: number
   players: Pick[]
   playersByRoundAndPick: GroupedRound
-  order: number[]
+  order: RoundPickPlayer[]
   setRound(round: number): void
   setRoundPick(roundPick: number): void
   setPlayers(players: Pick[] | any): void

@@ -1,30 +1,44 @@
-import React from 'react'
+import { useEffect } from 'react'
 import usePickPlayerStore from '../store/usePickPlayerStore'
 import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
+import teamAbbreviationToId from '../utilities/teamAbbreviationToId'
+import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
+import roundPickTeams from '../data/roundPickTeams'
 
 const About = () => {
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
     players: allMocksByTeam,
     order,
-    playersByRoundAndPick,
-    round,
     roundPick,
-    setRoundPick,
     setPlayers,
   } = usePickPlayerStore()
 
-  console.log('playersbyround', allMocksByTeam)
+  const abbreviation: string =
+    roundPickTeams[1][roundPick - 1].team_abbreviation
+  const teamId = teamAbbreviationToId(abbreviation)
+  const playerByTeamIdQuery = usePlayerByTeamIdQuery(teamId) // https://tkdodo.eu/blog/react-query-and-type-script
+
+  useEffect(() => {
+    if (playerByTeamIdQuery.isSuccess) {
+      setPlayers(playerByTeamIdQuery.data)
+    }
+  }, [playerByTeamIdQuery.isSuccess])
+
   return (
     <div className='snap-x snap-mandatory h-screen w-screen flex overflow-y-hidden'>
-      {order.map((order) => {
+      {order.map((playerObj) => {
         const analyses = allMocksByTeam.filter(
-          (mock) => mock.player_id === Number(order)
+          (mock) =>
+            mock.player_id === Number(playerObj.playerId) &&
+            mock.round === Number(playerObj.round) &&
+            mock.round_pick === Number(playerObj.roundPick)
         )
         const player = analyses[0]
         const colors = teamColors(player.team_id)
 
+        console.log(analyses)
         // stats
         // Other players at position mocked
         // % Analysts mock
@@ -36,12 +50,13 @@ const About = () => {
         const allMocksForPlayer = allMocksAtPick.filter(
           (m) => m.player_id === player.player_id
         )
-
-        console.log((allMocksForPlayer.length / allMocksAtPick.length) * 100)
+        const allMocksAtPosition = allMocksAtPick.filter(
+          (m) => m.position === player.position
+        )
 
         return (
           <div className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'>
-            <div className='grid grid-cols-4 grid-rows-6 gap-4 w-screen'>
+            <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
               <div className='col-span-2' />
               <div>
                 <div className='grid grid-rows-2'>
@@ -83,7 +98,6 @@ const About = () => {
                       </div>
                     </div>
                   </div>
-                  <div style={{ fontSize: 10 }}>{player.extra_info}</div>
                 </div>
               </div>
               <div>
@@ -116,7 +130,7 @@ const About = () => {
                   <div
                     style={{
                       position: 'absolute',
-                      top: 20,
+                      top: 0,
                       left: 200,
                       bottom: 0,
                     }}
@@ -159,21 +173,44 @@ const About = () => {
                   />
                 </div>
               </div>
-              <div className='col-span-2 md:col-span-1'>
+              <div className='col-span-2'>
                 <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
                   <div className='text-slate-700'>
-                    <span className='text-4xl'>
+                    <span className='text-4xl mr-2'>
                       {Math.floor(
                         (allMocksForPlayer.length / allMocksAtPick.length) * 100
                       )}
                       %
                     </span>
+                    <span className='text-xs'>
+                      ({allMocksForPlayer.length}/{allMocksAtPick.length})
+                    </span>
                   </div>
                   <div className='text-xs text-slate-500'>
-                    {allMocksForPlayer.length} of {allMocksAtPick.length} mock
-                    drafts select {player.name} at Pick {player.round_pick}
+                    mocks select {player.name} at Pick {player.round_pick}
                   </div>
                 </div>
+              </div>
+              <div className='col-span-2'>
+                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
+                  <div className='text-slate-700'>
+                    <span className='text-4xl mr-2'>
+                      {Math.floor(
+                        (allMocksAtPosition.length / allMocksAtPick.length) *
+                          100
+                      )}
+                      %
+                    </span>
+                    <span className='text-xs'>
+                      ({allMocksAtPosition.length}/{allMocksAtPick.length})
+                    </span>
+                  </div>
+                  <div className='text-xs text-slate-500'>
+                    mocks select {player.position} at Pick {player.round_pick}
+                  </div>
+                </div>
+              </div>
+              <div className='col-span-2 md:col-span-1'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-hidden'>
                   {analyses.map((analysis) => (
                     <div className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'>

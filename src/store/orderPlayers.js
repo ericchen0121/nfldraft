@@ -4,11 +4,15 @@ export const orderPlayers = (groupedPlayers) => {
   Object.entries(groupedPlayers).forEach(([round, picks]) => {
     Object.entries(picks).forEach(([pick, players]) => {
       // Order the player_ids by the length of the Players array, from most to least
-      const playerIds = Object.keys(players)
+      const playerObjs = Object.keys(players)
         .map((playerId) => ({ playerId, length: players[playerId].length }))
         .sort((a, b) => b.length - a.length)
-        .map((obj) => obj.playerId)
-      order.push(...playerIds)
+        .map((obj) => ({
+          round,
+          roundPick: pick,
+          playerId: obj.playerId,
+        }))
+      order.push(...playerObjs)
     })
   })
 
