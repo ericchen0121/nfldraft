@@ -26,9 +26,11 @@ interface PickPlayerStore {
   players: Pick[]
   playersByRoundAndPick: GroupedRound
   order: RoundPickPlayer[]
+  selectedTeamId: number
   setRound(round: number): void
   setRoundPick(roundPick: number): void
   setPlayers(players: Pick[] | any): void
+  setSelectedTeamId(selectedTeamId: number): void
 }
 
 const groupPlayersByRoundAndPick = (players: Pick[]) => {
@@ -57,6 +59,7 @@ const usePickPlayerStore = create<PickPlayerStore>((set) => ({
   roundPick: 1,
   players: [],
   order: [],
+  selectedTeamId: 6,
   playersByRoundAndPick: {},
   setRound: (round: number) => set(() => ({ round })),
   setRoundPick: (roundPick: number) => set(() => ({ roundPick })),
@@ -72,6 +75,8 @@ const usePickPlayerStore = create<PickPlayerStore>((set) => ({
       return set(() => ({ players: [] }))
     }
   },
+  setSelectedTeamId: (selectedTeamId: number) =>
+    set(() => ({ selectedTeamId })),
 }))
 
 export default usePickPlayerStore

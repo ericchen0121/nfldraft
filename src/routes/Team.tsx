@@ -2,23 +2,18 @@ import { useEffect } from 'react'
 import usePickPlayerStore from '../store/usePickPlayerStore'
 import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
-import teamAbbreviationToId from '../utilities/teamAbbreviationToId'
 import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
-import roundPickTeams from '../data/roundPickTeams'
 
-const About = () => {
+const Team = () => {
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
     players: allMocksByTeam,
     order,
-    roundPick,
+    selectedTeamId,
     setPlayers,
   } = usePickPlayerStore()
 
-  const abbreviation: string =
-    roundPickTeams[1][roundPick - 1].team_abbreviation
-  const teamId = teamAbbreviationToId(abbreviation)
-  const playerByTeamIdQuery = usePlayerByTeamIdQuery(teamId) // https://tkdodo.eu/blog/react-query-and-type-script
+  const playerByTeamIdQuery = usePlayerByTeamIdQuery(selectedTeamId) // https://tkdodo.eu/blog/react-query-and-type-script
 
   useEffect(() => {
     if (playerByTeamIdQuery.isSuccess) {
@@ -38,12 +33,6 @@ const About = () => {
         const player = analyses[0]
         const colors = teamColors(player.team_id)
 
-        console.log(analyses)
-        // stats
-        // Other players at position mocked
-        // % Analysts mock
-
-        // find total mock picks at the position
         const allMocksAtPick = allMocksByTeam.filter(
           (m) => m.round === player.round && m.round_pick === player.round_pick
         )
@@ -57,8 +46,10 @@ const About = () => {
         return (
           <div className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'>
             <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
-              <div className='col-span-2' />
-              <div>
+              <div className='col-start-1 col-end-3 flex flex-row'>
+                <div className='mr-8'>
+                  <TeamIconById id={player.team_id} size={100} />
+                </div>
                 <div className='grid grid-rows-2'>
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={{ marginRight: 12 }}>
@@ -99,9 +90,6 @@ const About = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <TeamIconById id={player.team_id} size={80} />
               </div>
               <div className='col-span-4'>
                 <div
@@ -259,4 +247,4 @@ const About = () => {
   )
 }
 
-export default About
+export default Team
