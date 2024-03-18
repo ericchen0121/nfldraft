@@ -17,28 +17,36 @@ const Team = () => {
   // scroll behavior on changing teams
   const [scrolledToFirst, setScrolledToFirst] = useState(false)
 
-  // daisy chaining scroll to first snap element and then to top (ie. showing nav bar)
+  // daisy chaining scroll to first snap element, then first analysis, then to top (ie. showing nav bar)
   useEffect(() => {
     if (scrolledToFirst) {
+      scrollToFirstAnalysis()
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setScrolledToFirst(false)
-      }, allMocksByTeam.length * 120)
+      }, allMocksByTeam.length * 200)
     }
   }, [scrolledToFirst, allMocksByTeam])
 
-  // We set the ref to the first analysis of the first player (rather than the first player)
-  // as the behavior scrolls the first player into view implicitly because it is the container of the first analysis
   const firstAnalysisSnapRef = useRef<HTMLInputElement>(null)
   const scrollToFirstAnalysis = () => {
-    firstAnalysisSnapRef?.current?.scrollIntoView({
+    setTimeout(() => {
+      firstAnalysisSnapRef?.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }, allMocksByTeam.length * 120)
+  }
+
+  const firstPlayerSnapRef = useRef<HTMLInputElement>(null)
+  const scrollToFirstPlayer = () => {
+    firstPlayerSnapRef?.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     })
 
     setScrolledToFirst(true)
   }
-
   const playerByTeamIdQuery = usePlayerByTeamIdQuery(selectedTeamId) // https://tkdodo.eu/blog/react-query-and-type-script
 
   useEffect(() => {
@@ -48,7 +56,7 @@ const Team = () => {
   }, [playerByTeamIdQuery.data])
 
   useEffect(() => {
-    scrollToFirstAnalysis()
+    scrollToFirstPlayer()
   }, [allMocksByTeam])
 
   return (
@@ -80,8 +88,13 @@ const Team = () => {
           (m) => m.position === player.position
         )
 
+        const firstPlayerRefProp =
+          orderIdx === 0 ? { ref: firstPlayerSnapRef } : {}
         return (
-          <div className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'>
+          <div
+            {...firstPlayerRefProp}
+            className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'
+          >
             <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
               <div className='col-start-1 col-end-4 flex flex-row'>
                 <div className='mr-8'>
