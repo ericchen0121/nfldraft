@@ -1,10 +1,12 @@
 import React from 'react'
 import teams from '../data/teams'
 
-const TeamIconById: React.FC<{ id: number; size: number }> = ({
+const TeamIconById: React.FC<{ id: number | undefined; size: number }> = ({
   id,
   size = 90,
 }) => {
+  if (!id) return <></>
+
   const teamAbbreviation = teams.find((t) => t.team_id === id)?.abbreviation
   const teamAbbreviationNormalized =
     teamAbbreviation === 'JAC' ? 'JAX' : teamAbbreviation

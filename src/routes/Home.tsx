@@ -25,8 +25,7 @@ const sortArrayValuesByDate = (a: IncludesDate, b: IncludesDate) => {
 const Home = () => {
   const { players, round, roundPick, setRoundPick, setPlayers } =
     usePickPlayerStore()
-  const abbreviation: string =
-    roundPickTeams[1][roundPick - 1].team_abbreviation
+  const abbreviation: string = roundPickTeams[1][roundPick - 1].teamAbbreviation
   const teamId = teamAbbreviationToId(abbreviation)
   const playerByTeamIdQuery = usePlayerByTeamIdQuery(teamId) // https://tkdodo.eu/blog/react-query-and-type-script
 

@@ -3,6 +3,7 @@ import usePickPlayerStore from '../store/usePickPlayerStore'
 import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
 import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
+import roundPickTeams from '../data/roundPickTeams'
 
 const Team = () => {
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
@@ -33,6 +34,13 @@ const Team = () => {
         const player = analyses[0]
         const colors = teamColors(player.team_id)
 
+        const defaultRound = 1
+
+        const roundPickTeam = roundPickTeams[defaultRound].find(
+          (x) => x.roundPick === Number(playerObj.roundPick)
+        )
+        const isTrade = roundPickTeam?.teamId !== player.team_id
+
         const allMocksAtPick = allMocksByTeam.filter(
           (m) => m.round === player.round && m.round_pick === player.round_pick
         )
@@ -46,11 +54,11 @@ const Team = () => {
         return (
           <div className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'>
             <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
-              <div className='col-start-1 col-end-3 flex flex-row'>
+              <div className='col-start-1 col-end-4 flex flex-row'>
                 <div className='mr-8'>
                   <TeamIconById id={player.team_id} size={100} />
                 </div>
-                <div className='grid grid-rows-2'>
+                <div className='grid grid-rows-2 mr-4'>
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={{ marginRight: 12 }}>
                       <div
@@ -89,6 +97,16 @@ const Team = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+                <div className='mt-8'>
+                  {isTrade ? (
+                    <span className='inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500'>
+                      Mock Trade from{' '}
+                      <TeamIconById id={roundPickTeam?.teamId} size={24} />
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
               <div className='col-span-4'>
@@ -200,7 +218,7 @@ const Team = () => {
               </div>
               <div className='col-span-2 md:col-span-1'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-hidden'>
-                  {analyses.map((analysis) => (
+                  {analyses.map((analysis, idx) => (
                     <div className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'>
                       <div className='p-8 relative border border-sky-400 rounded-2xl m-2'>
                         <span
@@ -225,14 +243,28 @@ const Team = () => {
                           {analysis.analysis}
                         </span>
                         <footer className='mt-4'>
-                          <span
-                            style={{
-                              fontFamily: 'Lato-Regular',
-                              fontSize: 12,
-                            }}
-                          >
-                            {analysis.analyst}
-                          </span>
+                          <div className='flex flex-row justify-between'>
+                            <span
+                              style={{
+                                fontFamily: 'Lato-Regular',
+                                fontSize: 12,
+                              }}
+                            >
+                              {analysis.analyst}
+                            </span>
+                            {idx === 0 && analyses.length === 1 ? (
+                              <></>
+                            ) : (
+                              <span
+                                style={{
+                                  fontFamily: 'Lato-Regular',
+                                  fontSize: 12,
+                                }}
+                              >
+                                {idx + 1}/{analyses.length}
+                              </span>
+                            )}
+                          </div>
                         </footer>
                       </div>
                     </div>
