@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import usePickPlayerStore from '../store/usePickPlayerStore'
 import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
@@ -6,6 +6,27 @@ import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
 import roundPickTeams from '../data/roundPickTeams'
 
 const Team = () => {
+  // scroll behavior on changing teams
+  const [scrolledToFirst, setScrolledToFirst] = useState(false)
+  const firstSnapRef = useRef<HTMLInputElement>(null)
+  const scrollToFirst = () => {
+    firstSnapRef?.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+    setScrolledToFirst(true)
+  }
+
+  // daisy chaining scroll to first snap element and then to top (ie. showing nav bar)
+  useEffect(() => {
+    if (scrolledToFirst) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+        setScrolledToFirst(false)
+      }, 1000)
+    }
+  }, [scrolledToFirst])
+
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
     players: allMocksByTeam,
@@ -17,14 +38,18 @@ const Team = () => {
   const playerByTeamIdQuery = usePlayerByTeamIdQuery(selectedTeamId) // https://tkdodo.eu/blog/react-query-and-type-script
 
   useEffect(() => {
-    if (playerByTeamIdQuery.isSuccess) {
+    if (playerByTeamIdQuery.data) {
       setPlayers(playerByTeamIdQuery.data)
     }
-  }, [playerByTeamIdQuery.isSuccess])
+  }, [playerByTeamIdQuery.data])
+
+  useEffect(() => {
+    scrollToFirst()
+  }, [allMocksByTeam])
 
   return (
     <div className='snap-x snap-mandatory h-screen w-screen flex overflow-y-hidden'>
-      {order.map((playerObj) => {
+      {order.map((playerObj, orderIdx) => {
         const analyses = allMocksByTeam.filter(
           (mock) =>
             mock.player_id === Number(playerObj.playerId) &&
@@ -50,9 +75,12 @@ const Team = () => {
         const allMocksAtPosition = allMocksAtPick.filter(
           (m) => m.position === player.position
         )
-
+        const firstRefProp = orderIdx === 0 ? { ref: firstSnapRef } : {}
         return (
-          <div className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'>
+          <div
+            {...firstRefProp}
+            className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'
+          >
             <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
               <div className='col-start-1 col-end-4 flex flex-row'>
                 <div className='mr-8'>
