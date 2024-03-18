@@ -24,7 +24,7 @@ const Team = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setScrolledToFirst(false)
-      }, allMocksByTeam.length * 120)
+      }, allMocksByTeam.length * 125)
     }
   }, [scrolledToFirst, allMocksByTeam])
 
