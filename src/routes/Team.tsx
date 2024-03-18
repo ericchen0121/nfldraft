@@ -24,7 +24,7 @@ const Team = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setScrolledToFirst(false)
-      }, allMocksByTeam.length * 200)
+      }, allMocksByTeam.length * 120)
     }
   }, [scrolledToFirst, allMocksByTeam])
 
@@ -32,7 +32,7 @@ const Team = () => {
   const scrollToFirstAnalysis = () => {
     setTimeout(() => {
       firstAnalysisSnapRef?.current?.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'auto',
         block: 'start',
       })
     }, allMocksByTeam.length * 120)
