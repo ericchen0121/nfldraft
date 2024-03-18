@@ -25,7 +25,7 @@ const Team = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setScrolledToFirst(false)
-      }, allMocksByTeam.length * 125)
+      }, order.length * 125)
     }
   }, [scrolledToFirst, allMocksByTeam])
 
@@ -36,7 +36,7 @@ const Team = () => {
         behavior: 'auto',
         block: 'start',
       })
-    }, allMocksByTeam.length * 120)
+    }, order.length * 120)
   }
 
   const firstPlayerSnapRef = useRef<HTMLInputElement>(null)
