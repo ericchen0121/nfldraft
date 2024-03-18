@@ -48,7 +48,7 @@ const Team = () => {
   }, [allMocksByTeam])
 
   return (
-    <div className='snap-x snap-mandatory h-screen w-screen flex overflow-y-hidden'>
+    <div className='snap-x snap-mandatory h-screen w-screen flex overflow-y-auto'>
       {order.map((playerObj, orderIdx) => {
         const analyses = allMocksByTeam.filter(
           (mock) =>
@@ -245,7 +245,7 @@ const Team = () => {
                 </div>
               </div>
               <div className='col-span-2 md:col-span-1'>
-                <div className='snap-x snap-mandatory w-screen flex overflow-y-hidden'>
+                <div className='snap-x snap-mandatory w-screen flex overflow-y-auto'>
                   {analyses.map((analysis, idx) => (
                     <div className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'>
                       <div className='p-8 relative border border-sky-400 rounded-2xl m-2'>
