@@ -6,27 +6,6 @@ import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
 import roundPickTeams from '../data/roundPickTeams'
 
 const Team = () => {
-  // scroll behavior on changing teams
-  const [scrolledToFirst, setScrolledToFirst] = useState(false)
-  const firstSnapRef = useRef<HTMLInputElement>(null)
-  const scrollToFirst = () => {
-    firstSnapRef?.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
-    setScrolledToFirst(true)
-  }
-
-  // daisy chaining scroll to first snap element and then to top (ie. showing nav bar)
-  useEffect(() => {
-    if (scrolledToFirst) {
-      setTimeout(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
-        setScrolledToFirst(false)
-      }, 1000)
-    }
-  }, [scrolledToFirst])
-
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
     players: allMocksByTeam,
@@ -34,6 +13,31 @@ const Team = () => {
     selectedTeamId,
     setPlayers,
   } = usePickPlayerStore()
+
+  // scroll behavior on changing teams
+  const [scrolledToFirst, setScrolledToFirst] = useState(false)
+
+  // daisy chaining scroll to first snap element and then to top (ie. showing nav bar)
+  useEffect(() => {
+    if (scrolledToFirst) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+        setScrolledToFirst(false)
+      }, allMocksByTeam.length * 120)
+    }
+  }, [scrolledToFirst, allMocksByTeam])
+
+  // We set the ref to the first analysis of the first player (rather than the first player)
+  // as the behavior scrolls the first player into view implicitly because it is the container of the first analysis
+  const firstAnalysisSnapRef = useRef<HTMLInputElement>(null)
+  const scrollToFirstAnalysis = () => {
+    firstAnalysisSnapRef?.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+
+    setScrolledToFirst(true)
+  }
 
   const playerByTeamIdQuery = usePlayerByTeamIdQuery(selectedTeamId) // https://tkdodo.eu/blog/react-query-and-type-script
 
@@ -44,7 +48,7 @@ const Team = () => {
   }, [playerByTeamIdQuery.data])
 
   useEffect(() => {
-    scrollToFirst()
+    scrollToFirstAnalysis()
   }, [allMocksByTeam])
 
   return (
@@ -75,12 +79,9 @@ const Team = () => {
         const allMocksAtPosition = allMocksAtPick.filter(
           (m) => m.position === player.position
         )
-        const firstRefProp = orderIdx === 0 ? { ref: firstSnapRef } : {}
+
         return (
-          <div
-            {...firstRefProp}
-            className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'
-          >
+          <div className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'>
             <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
               <div className='col-start-1 col-end-4 flex flex-row'>
                 <div className='mr-8'>
@@ -246,57 +247,66 @@ const Team = () => {
               </div>
               <div className='col-span-2 md:col-span-1'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-auto'>
-                  {analyses.map((analysis, idx) => (
-                    <div className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'>
-                      <div className='p-8 relative border border-sky-400 rounded-2xl m-2'>
-                        <span
-                          style={{
-                            fontFamily: 'Lato-Italic',
-                            fontSize: 40,
-                            lineHeight: 0.7,
-                            color: colors[1],
-                            position: 'absolute',
-                            top: 28,
-                            left: 8,
-                          }}
-                        >
-                          "
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'Lato-Regular',
-                            fontSize: 15,
-                          }}
-                        >
-                          {analysis.analysis}
-                        </span>
-                        <footer className='mt-4'>
-                          <div className='flex flex-row justify-between'>
-                            <span
-                              style={{
-                                fontFamily: 'Lato-Regular',
-                                fontSize: 12,
-                              }}
-                            >
-                              {analysis.analyst}
-                            </span>
-                            {idx === 0 && analyses.length === 1 ? (
-                              <></>
-                            ) : (
+                  {analyses.map((analysis, analysisIdx) => {
+                    const firstAnalysisRefProp =
+                      analysisIdx === 0 && orderIdx === 0
+                        ? { ref: firstAnalysisSnapRef }
+                        : {}
+                    return (
+                      <div
+                        {...firstAnalysisRefProp}
+                        className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'
+                      >
+                        <div className='p-8 relative border border-sky-400 rounded-2xl m-2'>
+                          <span
+                            style={{
+                              fontFamily: 'Lato-Italic',
+                              fontSize: 40,
+                              lineHeight: 0.7,
+                              color: colors[1],
+                              position: 'absolute',
+                              top: 28,
+                              left: 8,
+                            }}
+                          >
+                            "
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: 'Lato-Regular',
+                              fontSize: 15,
+                            }}
+                          >
+                            {analysis.analysis}
+                          </span>
+                          <footer className='mt-4'>
+                            <div className='flex flex-row justify-between'>
                               <span
                                 style={{
                                   fontFamily: 'Lato-Regular',
                                   fontSize: 12,
                                 }}
                               >
-                                {idx + 1}/{analyses.length}
+                                {analysis.analyst}
                               </span>
-                            )}
-                          </div>
-                        </footer>
+                              {analysisIdx === 0 && analyses.length === 1 ? (
+                                <></>
+                              ) : (
+                                <span
+                                  style={{
+                                    fontFamily: 'Lato-Regular',
+                                    fontSize: 12,
+                                  }}
+                                >
+                                  {analysisIdx + 1}/{analyses.length}
+                                </span>
+                              )}
+                            </div>
+                          </footer>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             </div>
