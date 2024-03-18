@@ -4,6 +4,7 @@ import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
 import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
 import roundPickTeams from '../data/roundPickTeams'
+import EmptyPlayersForTeam from '../molecules/EmptyPlayersForTeam'
 
 const Team = () => {
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
@@ -58,6 +59,10 @@ const Team = () => {
   useEffect(() => {
     scrollToFirstPlayer()
   }, [allMocksByTeam])
+
+  if (allMocksByTeam.length === 0) {
+    return <EmptyPlayersForTeam teamId={selectedTeamId} />
+  }
 
   return (
     <div className='snap-x snap-mandatory h-screen w-screen flex overflow-y-auto'>
