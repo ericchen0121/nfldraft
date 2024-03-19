@@ -112,8 +112,9 @@ export default {
     },
     {
       roundPick: 23,
-      teamAbbreviation: 'HOU',
-      teamId: 13,
+      teamAbbreviation: 'MIN',
+      teamId: 21,
+      priorTeamIds: [21, 13],
     },
     {
       roundPick: 24,

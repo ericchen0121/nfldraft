@@ -555,7 +555,7 @@ export default [
     full_name: 'Seattle Seahawks',
     abbreviation: 'SEA',
     primaryColor: '#002244',
-    secondaryColor: '#A5ACAF',
+    secondaryColor: '#69BE28',
   },
   {
     team_id: 30,

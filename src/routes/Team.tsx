@@ -6,6 +6,8 @@ import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
 import roundPickTeams from '../data/roundPickTeams'
 import EmptyPlayersForTeam from '../molecules/EmptyPlayersForTeam'
 import ProgressBar from '../atoms/ProgressBar'
+import AnalystUrlDisplay from '../atoms/AnalystUrlDisplay'
+import { format } from 'date-fns'
 const Team = () => {
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
@@ -67,12 +69,17 @@ const Team = () => {
   return (
     <div className='snap-x snap-mandatory h-screen w-screen flex overflow-y-auto'>
       {order.map((playerObj, orderIdx) => {
-        const analyses = allMocksByTeam.filter(
-          (mock) =>
-            mock.player_id === playerObj.playerId &&
-            mock.round === playerObj.round &&
-            mock.round_pick === playerObj.roundPick
-        )
+        const analyses = allMocksByTeam
+          .filter(
+            (mock) =>
+              mock.player_id === playerObj.playerId &&
+              mock.round === playerObj.round &&
+              mock.round_pick === playerObj.roundPick
+          )
+          .sort((a, b) => {
+            return new Date(b.date).valueOf() - new Date(a.date).valueOf()
+          })
+
         const player = analyses[0]
         const colors = teamColors(player.team_id)
 
@@ -182,8 +189,7 @@ const Team = () => {
                 <div className='mt-8'>
                   {isTrade ? (
                     <span className='inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500'>
-                      Mock Trade from{' '}
-                      <TeamIconById id={roundPickTeam?.teamId} size={24} />
+                      Mock Trade
                     </span>
                   ) : (
                     <></>
@@ -332,7 +338,10 @@ const Team = () => {
                   </div>
                 </div>
               </div>
-              <div id='stats3-header' className='hidden md:block col-span-3'>
+              <div
+                id='stats3-header'
+                className='col-span-6 md:block md:col-span-3'
+              >
                 <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
                   <div className='grid grid-rows-3 grid-overflow-auto'>
                     {dataPlayersAtPosition.map((d) => {
@@ -352,27 +361,32 @@ const Team = () => {
                   </div>
                 </div>
               </div>
-              <div id='stats4-header' className='hidden md:block col-span-3'>
+              <div
+                id='stats4-header'
+                className='col-span-6 md:block md:col-span-3'
+              >
                 <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
-                  <div className='grid grid-rows-3 grid-overflow-auto'>
+                  <div className='grid grid-rows-6 grid-cols-6 grid-overflow-auto'>
                     {dataPositionsAtPick.map((d) => {
                       return (
-                        <div>
-                          <span className='text-xs'>{d.position}</span>
-                          <span>
+                        <>
+                          <span className='text-xs col-span-1'>
+                            {d.position}
+                          </span>
+                          <span className='col-span-5 flex items-center'>
                             <ProgressBar
                               percent={Math.floor(
                                 (d.count / allMocksAtPick.length) * 100
                               )}
                             />
                           </span>
-                        </div>
+                        </>
                       )
                     })}
                   </div>
                 </div>
               </div>
-              <div className='col-span-12 md:col-span-3'>
+              <div className='col-span-12 md:col-span-3 mt-4'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-auto'>
                   {analyses.map((analysis, analysisIdx) => {
                     const firstAnalysisRefProp =
@@ -408,21 +422,39 @@ const Team = () => {
                           </span>
                           <footer className='mt-4'>
                             <div className='flex flex-row justify-between'>
-                              <span
-                                style={{
-                                  fontFamily: 'Lato-Regular',
-                                  fontSize: 12,
-                                }}
-                              >
-                                {analysis.analyst}
-                              </span>
+                              <div className='flex flex-col'>
+                                <span
+                                  style={{
+                                    fontFamily: 'Lato-Regular',
+                                    fontSize: 12,
+                                  }}
+                                >
+                                  {analysis.analyst}
+                                </span>
+                                <span
+                                  style={{
+                                    fontFamily: 'Lato-Regular',
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  <AnalystUrlDisplay url={analysis.url} />
+                                </span>
+                                <span
+                                  style={{
+                                    fontFamily: 'Lato-Regular',
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  {format(analysis.date, 'M/dd/yyyy')}
+                                </span>
+                              </div>
                               {analysisIdx === 0 && analyses.length === 1 ? (
                                 <></>
                               ) : (
                                 <span
                                   style={{
                                     fontFamily: 'Lato-Regular',
-                                    fontSize: 12,
+                                    fontSize: 10,
                                   }}
                                 >
                                   {analysisIdx + 1}/{analyses.length}
