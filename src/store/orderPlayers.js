@@ -8,9 +8,9 @@ export const orderPlayers = (groupedPlayers) => {
         .map((playerId) => ({ playerId, length: players[playerId].length }))
         .sort((a, b) => b.length - a.length)
         .map((obj) => ({
-          round,
-          roundPick: pick,
-          playerId: obj.playerId,
+          round: Number(round),
+          roundPick: Number(pick),
+          playerId: Number(obj.playerId),
         }))
       order.push(...playerObjs)
     })

@@ -103,7 +103,7 @@ export default {
     {
       roundPick: 21,
       teamAbbreviation: 'MIA',
-      teamId: 27,
+      teamId: 20,
     },
     {
       roundPick: 22,

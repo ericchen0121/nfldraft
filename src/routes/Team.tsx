@@ -5,7 +5,7 @@ import teamColors from '../utilities/teamColors'
 import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
 import roundPickTeams from '../data/roundPickTeams'
 import EmptyPlayersForTeam from '../molecules/EmptyPlayersForTeam'
-
+import ProgressBar from '../atoms/ProgressBar'
 const Team = () => {
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
@@ -25,9 +25,9 @@ const Team = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setScrolledToFirst(false)
-      }, order.length * 125)
+      }, order.length * 175)
     }
-  }, [scrolledToFirst, allMocksByTeam])
+  }, [scrolledToFirst])
 
   const firstAnalysisSnapRef = useRef<HTMLInputElement>(null)
   const scrollToFirstAnalysis = () => {
@@ -36,7 +36,7 @@ const Team = () => {
         behavior: 'auto',
         block: 'start',
       })
-    }, order.length * 120)
+    }, order.length * 150)
   }
 
   const firstPlayerSnapRef = useRef<HTMLInputElement>(null)
@@ -69,9 +69,9 @@ const Team = () => {
       {order.map((playerObj, orderIdx) => {
         const analyses = allMocksByTeam.filter(
           (mock) =>
-            mock.player_id === Number(playerObj.playerId) &&
-            mock.round === Number(playerObj.round) &&
-            mock.round_pick === Number(playerObj.roundPick)
+            mock.player_id === playerObj.playerId &&
+            mock.round === playerObj.round &&
+            mock.round_pick === playerObj.roundPick
         )
         const player = analyses[0]
         const colors = teamColors(player.team_id)
@@ -79,7 +79,7 @@ const Team = () => {
         const defaultRound = 1
 
         const roundPickTeam = roundPickTeams[defaultRound].find(
-          (x) => x.roundPick === Number(playerObj.roundPick)
+          (x) => x.roundPick === playerObj.roundPick
         )
         const isTrade = roundPickTeam?.teamId !== player.team_id
 
@@ -93,6 +93,40 @@ const Team = () => {
           (m) => m.position === player.position
         )
 
+        // number[] with player ids
+        const playersAtPosition = Array.from(
+          new Set(allMocksAtPosition.map((m) => m.player_id))
+        )
+        const dataPlayersAtPosition = playersAtPosition.map((playerId) => {
+          const count = allMocksAtPosition.filter(
+            (m) => m.player_id === playerId
+          ).length
+          const playerData = allMocksByTeam.find(
+            (m) => m.player_id === playerId
+          )
+          return {
+            name: playerData?.name,
+            playerId: playerData?.player_id,
+            image: playerData?.image,
+            count,
+          }
+        })
+
+        const positionsAtPick = Array.from(
+          new Set(allMocksAtPick.map((m) => m.position))
+        )
+
+        const dataPositionsAtPick = positionsAtPick.map((position) => {
+          const count = allMocksAtPick.filter(
+            (m) => m.position === position
+          ).length
+
+          return {
+            position,
+            count,
+          }
+        })
+
         const firstPlayerRefProp =
           orderIdx === 0 ? { ref: firstPlayerSnapRef } : {}
         return (
@@ -100,8 +134,8 @@ const Team = () => {
             {...firstPlayerRefProp}
             className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'
           >
-            <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
-              <div className='col-start-1 col-end-4 flex flex-row'>
+            <div className='grid grid-cols-12 grid-rows-8 gap-4 w-screen'>
+              <div id='team-header' className='col-span-12 flex flex-row'>
                 <div className='mr-8'>
                   <TeamIconById id={player.team_id} size={100} />
                 </div>
@@ -156,7 +190,7 @@ const Team = () => {
                   )}
                 </div>
               </div>
-              <div className='col-span-4'>
+              <div id='player-header' className='col-span-12'>
                 <div
                   style={{
                     position: 'relative',
@@ -226,25 +260,43 @@ const Team = () => {
                   />
                 </div>
               </div>
-              <div className='col-span-2'>
+              <div id='stats1-header' className='col-span-6 md:col-span-3'>
                 <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
-                  <div className='text-slate-700'>
-                    <span className='text-4xl mr-2'>
+                  <div className='text-slate-700 flex flex-row'>
+                    <div className='text-4xl mr-2'>
                       {Math.floor(
                         (allMocksForPlayer.length / allMocksAtPick.length) * 100
                       )}
-                      %
-                    </span>
-                    <span className='text-xs'>
-                      ({allMocksForPlayer.length}/{allMocksAtPick.length})
-                    </span>
+                      <span
+                        style={{
+                          fontFamily: 'BarlowCondensed-Regular',
+                          fontSize: 22,
+                        }}
+                      >
+                        %
+                      </span>
+                    </div>
+                    <div>
+                      <img
+                        style={{
+                          zIndex: 3,
+                          height: 40,
+                          borderRadius: '50%',
+                        }}
+                        src={`https://static.www.nfl.com/image/private/f_png,q_100,h_400,w_400,c_fill,g_face:center,f_auto/%7B%7Binstance%7D%7D/god-draft-headshots/2024/${player?.image?.nfl_id}`}
+                      />
+                    </div>
                   </div>
                   <div className='text-xs text-slate-500'>
-                    mocks select {player.name} at Pick {player.round_pick}
+                    <div>
+                      ({allMocksForPlayer.length}/{allMocksAtPick.length})
+                      select {player.name.split(' ')[1]}
+                    </div>
+                    <div>at Pick {player.round_pick}</div>
                   </div>
                 </div>
               </div>
-              <div className='col-span-2'>
+              <div id='stats2-header' className='col-span-6 md:col-span-3'>
                 <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
                   <div className='text-slate-700'>
                     <span className='text-4xl mr-2'>
@@ -252,18 +304,75 @@ const Team = () => {
                         (allMocksAtPosition.length / allMocksAtPick.length) *
                           100
                       )}
-                      %
+                      <span
+                        style={{
+                          fontFamily: 'BarlowCondensed-Regular',
+                          fontSize: 22,
+                        }}
+                      >
+                        %
+                      </span>
                     </span>
-                    <span className='text-xs'>
-                      ({allMocksAtPosition.length}/{allMocksAtPick.length})
+                    <span
+                      style={{
+                        fontFamily: 'BarlowCondensed-Regular',
+                        fontSize: 40,
+                        lineHeight: '40px',
+                      }}
+                    >
+                      {player.position}
                     </span>
                   </div>
                   <div className='text-xs text-slate-500'>
-                    mocks select {player.position} at Pick {player.round_pick}
+                    <div>
+                      ({allMocksAtPosition.length}/{allMocksAtPick.length})
+                      select {player.position}
+                    </div>
+                    <div> at Pick {player.round_pick}</div>
                   </div>
                 </div>
               </div>
-              <div className='col-span-2 md:col-span-1'>
+              <div id='stats3-header' className='hidden md:block col-span-3'>
+                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
+                  <div className='grid grid-rows-3 grid-overflow-auto'>
+                    {dataPlayersAtPosition.map((d) => {
+                      return (
+                        <div>
+                          <span className='text-xs'>{d.name}</span>
+                          <span>
+                            <ProgressBar
+                              percent={Math.floor(
+                                (d.count / allMocksAtPosition.length) * 100
+                              )}
+                            />
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+              <div id='stats4-header' className='hidden md:block col-span-3'>
+                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
+                  <div className='grid grid-rows-3 grid-overflow-auto'>
+                    {dataPositionsAtPick.map((d) => {
+                      return (
+                        <div>
+                          <span className='text-xs'>{d.position}</span>
+                          <span>
+                            <ProgressBar
+                              percent={Math.floor(
+                                (d.count / allMocksAtPick.length) * 100
+                              )}
+                            />
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+              <div className='col-span-12 md:col-span-3'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-auto'>
                   {analyses.map((analysis, analysisIdx) => {
                     const firstAnalysisRefProp =

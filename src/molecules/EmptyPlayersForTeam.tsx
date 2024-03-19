@@ -1,6 +1,11 @@
 import TeamIconById from '../atoms/TeamIconById'
 
-const EmptyPlayersForTeam = ({ teamId }) => {
+interface EmptyPlayersForTeamProps {
+  teamId: number
+}
+
+const EmptyPlayersForTeam = (props: EmptyPlayersForTeamProps) => {
+  const { teamId } = props
   return (
     <>
       <div className='grid grid-cols-4 grid-rows-8 gap-4 w-screen'>
