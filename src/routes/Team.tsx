@@ -37,7 +37,7 @@ const Team = () => {
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setScrolledToFirst(false)
-      }, order.length * 175)
+      }, order.length * 200)
     }
   }, [scrolledToFirst])
 

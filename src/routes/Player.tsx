@@ -173,7 +173,6 @@ const Player = () => {
               }}
             >
               {player.name}{' '}
-              <span style={{ all: 'revert', fontSize: 12 }}>View</span>
             </div>
             <div
               style={{

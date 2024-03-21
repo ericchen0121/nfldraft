@@ -329,8 +329,8 @@ export default [
     name: 'Bills',
     full_name: 'Buffalo Bills',
     abbreviation: 'BUF',
-    primaryColor: '#A71930',
-    secondaryColor: '#000000',
+    primaryColor: '#00338D',
+    secondaryColor: '#C60C30',
   },
   {
     team_id: 5,
@@ -374,7 +374,7 @@ export default [
     name: 'Cowboys',
     full_name: 'Dallas Cowboys',
     abbreviation: 'DAL',
-    primaryColor: '#003594',
+    primaryColor: '#869397',
     secondaryColor: '#041E42',
   },
   {
@@ -428,7 +428,7 @@ export default [
     name: 'Jaguars',
     full_name: 'Jacksonville Jaguars',
     abbreviation: 'JAC',
-    primaryColor: '#101820',
+    primaryColor: '#006778',
     secondaryColor: '#D7A22A',
   },
   {
@@ -510,7 +510,7 @@ export default [
     full_name: 'New York Giants',
     abbreviation: 'NYG',
     primaryColor: '#0B2265',
-    secondaryColor: '#A5ACAF',
+    secondaryColor: '#A71930',
   },
   {
     team_id: 25,
