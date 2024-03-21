@@ -33,7 +33,7 @@ const Team = () => {
   // daisy chaining scroll to first snap element, then first analysis, then to top (ie. showing nav bar)
   useEffect(() => {
     if (scrolledToFirst) {
-      scrollToFirstAnalysis()
+      // scrollToFirstAnalysis()
       setTimeout(() => {
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
         setScrolledToFirst(false)
@@ -286,9 +286,15 @@ const Team = () => {
                   />
                 </div>
               </div>
-              <div id='stats1-header' className='col-span-6 md:col-span-3'>
-                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
-                  <div className='text-slate-700 flex flex-row'>
+              <div
+                id='stats1-header'
+                className='col-span-6 md:col-span-3 grid grid-rows-6'
+              >
+                <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+                  Player Selection %
+                </div>
+                <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+                  <div className='text-slate-700 flex flex-row items-center justify-center h-full'>
                     <div className='text-4xl mr-2'>
                       {Math.floor(
                         (allMocksForPlayer.length / allMocksAtPick.length) * 100
@@ -313,18 +319,17 @@ const Team = () => {
                       />
                     </div>
                   </div>
-                  <div className='text-xs text-slate-500'>
-                    <div>
-                      ({allMocksForPlayer.length}/{allMocksAtPick.length})
-                      select {player.name.split(' ')[1]}
-                    </div>
-                    <div>at Pick {player.round_pick}</div>
-                  </div>
                 </div>
               </div>
-              <div id='stats2-header' className='col-span-6 md:col-span-3'>
-                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
-                  <div className='text-slate-700'>
+              <div
+                id='stats2-header'
+                className='col-span-6 md:col-span-3 grid grid-rows-6'
+              >
+                <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+                  Position Selection %
+                </div>
+                <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+                  <div className='text-slate-700 flex flex-row items-center justify-center h-full'>
                     <span className='text-4xl mr-2'>
                       {Math.floor(
                         (allMocksAtPosition.length / allMocksAtPick.length) *
@@ -344,27 +349,24 @@ const Team = () => {
                         fontFamily: 'BarlowCondensed-Regular',
                         fontSize: 40,
                         lineHeight: '40px',
+                        marginTop: -6,
                       }}
                     >
                       {player.position}
                     </span>
                   </div>
-                  <div className='text-xs text-slate-500'>
-                    <div>
-                      ({allMocksAtPosition.length}/{allMocksAtPick.length})
-                      select {player.position}
-                    </div>
-                    <div> at Pick {player.round_pick}</div>
-                  </div>
                 </div>
               </div>
               <div
                 id='stats3-header'
-                className='col-span-6 md:block md:col-span-3'
+                className='col-span-6 md:block md:col-span-3 grid grid-rows-5'
               >
-                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
+                <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+                  Relative Selection: Players at Position
+                </div>
+                <div className='row-span-4 p-1 relative border border-pink-300 rounded-lg'>
                   <div className='grid grid-rows-6 grid-cols-6 grid-overflow-auto'>
-                    {dataPlayersAtPosition.map((d) => {
+                    {dataPlayersAtPosition.slice(0, 5).map((d) => {
                       return (
                         <>
                           <span className='col-span-4' style={{ fontSize: 10 }}>
@@ -385,11 +387,14 @@ const Team = () => {
               </div>
               <div
                 id='stats4-header'
-                className='col-span-6 md:block md:col-span-3'
+                className='col-span-6 md:block md:col-span-3 grid grid-rows-5'
               >
-                <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
+                <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+                  Relative Selection: Position
+                </div>
+                <div className='row-span-4 p-1 relative border border-pink-300 rounded-lg'>
                   <div className='grid grid-rows-6 grid-cols-6 grid-overflow-auto'>
-                    {dataPositionsAtPick.map((d) => {
+                    {dataPositionsAtPick.slice(0, 5).map((d) => {
                       return (
                         <>
                           <span className='text-xs col-span-1'>
@@ -408,7 +413,7 @@ const Team = () => {
                   </div>
                 </div>
               </div>
-              <div className='col-span-12 md:col-span-3 mt-8'>
+              <div className='col-span-12 md:col-span-3 mt-2'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-auto'>
                   {analyses.map((analysis, analysisIdx) => {
                     const firstAnalysisRefProp =
