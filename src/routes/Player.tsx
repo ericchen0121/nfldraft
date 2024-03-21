@@ -63,7 +63,7 @@ const Player = () => {
   }
 
   return (
-    <div className='grid grid-cols-12 grid-rows-12 gap-1 w-screen'>
+    <div className='grid grid-cols-12 grid-rows-12 gap-1 w-screen h-screen'>
       <div id='player-header' className='col-span-12 row-span-2'>
         <div
           style={{
