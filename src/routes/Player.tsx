@@ -29,6 +29,12 @@ const Player = () => {
     }
   }, [playerByPlayerIdQuery.data])
 
+  useEffect(() => {
+    if (picks?.length) {
+      setSelectedPick(picks[picks?.length - 1])
+    }
+  }, [picks])
+
   const player = picks?.[0]
   const colors = selectedPick
     ? teamColors(selectedPick.team_id)
@@ -46,11 +52,28 @@ const Player = () => {
       const pick = payload?.[0].payload
 
       return (
-        <div className='custom-tooltip'>
-          <p className='label'>{`PK: ${pick.round_pick}`}</p>
-          <p className='desc'>
-            <TeamIconById id={pick.team_id} size={30} />
-          </p>
+        <div className='custom-tooltip bg-slate-100 flex flex-row items-center rounded'>
+          <span className='desc mr-2'>
+            <TeamIconById id={pick.team_id} size={40} />
+          </span>
+          <div className='mr-1'>
+            <div
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 24,
+              }}
+            >
+              {pick.round_pick}
+            </div>
+            <div
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 14,
+              }}
+            >
+              PK
+            </div>
+          </div>
         </div>
       )
     }
@@ -136,21 +159,25 @@ const Player = () => {
           />
         </div>
       </div>
-      <div id='player-header' className='col-span-12 mt-4 row-span-3'>
-        <ResponsiveContainer width='100%' height={200}>
+      <div id='player-header' className='col-span-12 mt-4 row-span-2 mb-4'>
+        <ResponsiveContainer width='100%' height={'100%'}>
           <LineChart
-            width={1000}
+            width={200}
             height={400}
             data={sortedPicks}
             margin={{
-              top: 5,
-              right: 30,
+              top: 4,
+              right: 20,
               left: 20,
-              bottom: 5,
+              bottom: 4,
             }}
             onMouseMove={(state) => {
-              console.log('state', state)
               if (state.isTooltipActive) {
+                setSelectedPick(state?.activePayload?.[0]?.payload)
+              }
+            }}
+            onClick={(state) => {
+              if (state) {
                 setSelectedPick(state?.activePayload?.[0]?.payload)
               }
             }}
@@ -158,21 +185,27 @@ const Player = () => {
             <XAxis
               dataKey='date'
               allowDecimals={false}
-              hide
+              tick={false}
               label={{
                 value: 'Date',
-                angle: -90,
-                position: 'inside',
+                angle: 0,
+                position: 'insideBottomRight',
+                fontFamily: 'Lato-Regular',
+                fontSize: 12,
               }}
             />
             <YAxis
-              domain={[1, 32]}
+              domain={['dataMin', 'dataMax']}
+              allowDecimals={false}
               interval={0}
               label={{
-                value: 'Pick of Round 1',
+                value: 'Pick #',
                 angle: -90,
-                position: 'inside',
+                position: 'insideBottomLeft',
+                fontFamily: 'Lato-Regular',
+                fontSize: 12,
               }}
+              padding={{ top: 8, bottom: 8 }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Line
@@ -186,10 +219,13 @@ const Player = () => {
       </div>
       {selectedPick && (
         <>
-          <div className='col-span-6'>
+          <div className='col-span-3'>
             <TeamIconById id={selectedPick.team_id} size={80} />
             <div className='grid grid-rows-2 mr-4'>
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div
+                className='ml-4'
+                style={{ display: 'flex', flexDirection: 'row' }}
+              >
                 <div style={{ marginRight: 12 }}>
                   <div
                     style={{
@@ -229,7 +265,16 @@ const Player = () => {
               </div>
             </div>
           </div>
-          <div className='col-span-6'>{selectedPick.analysis}</div>
+          <div className='col-span-9 mr-4'>
+            <span
+              style={{
+                fontFamily: 'Lato-Regular',
+                fontSize: 15,
+              }}
+            >
+              {selectedPick.analysis}
+            </span>
+          </div>
         </>
       )}
     </div>
