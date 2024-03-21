@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import usePickPlayerStore from '../store/usePickPlayerStore'
 import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
@@ -8,7 +9,9 @@ import EmptyPlayersForTeam from '../molecules/EmptyPlayersForTeam'
 import ProgressBar from '../atoms/ProgressBar'
 import AnalystUrlDisplay from '../atoms/AnalystUrlDisplay'
 import { format } from 'date-fns'
+import usePlayerStore from '../store/usePlayerStore'
 const Team = () => {
+  const navigate = useNavigate()
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
   const {
     players: allMocksByTeam,
@@ -16,6 +19,13 @@ const Team = () => {
     selectedTeamId,
     setPlayers,
   } = usePickPlayerStore()
+
+  const { setSelectedPlayerId } = usePlayerStore()
+
+  const handlePlayerClick = (playerId: number) => {
+    setSelectedPlayerId(playerId)
+    navigate('/player')
+  }
 
   // scroll behavior on changing teams
   const [scrolledToFirst, setScrolledToFirst] = useState(false)
@@ -104,35 +114,39 @@ const Team = () => {
         const playersAtPosition = Array.from(
           new Set(allMocksAtPosition.map((m) => m.player_id))
         )
-        const dataPlayersAtPosition = playersAtPosition.map((playerId) => {
-          const count = allMocksAtPosition.filter(
-            (m) => m.player_id === playerId
-          ).length
-          const playerData = allMocksByTeam.find(
-            (m) => m.player_id === playerId
-          )
-          return {
-            name: playerData?.name,
-            playerId: playerData?.player_id,
-            image: playerData?.image,
-            count,
-          }
-        })
+        const dataPlayersAtPosition = playersAtPosition
+          .map((playerId) => {
+            const count = allMocksAtPosition.filter(
+              (m) => m.player_id === playerId
+            ).length
+            const playerData = allMocksByTeam.find(
+              (m) => m.player_id === playerId
+            )
+            return {
+              name: playerData?.name,
+              playerId: playerData?.player_id,
+              image: playerData?.image,
+              count,
+            }
+          })
+          .sort((a, b) => b.count - a.count)
 
         const positionsAtPick = Array.from(
           new Set(allMocksAtPick.map((m) => m.position))
         )
 
-        const dataPositionsAtPick = positionsAtPick.map((position) => {
-          const count = allMocksAtPick.filter(
-            (m) => m.position === position
-          ).length
+        const dataPositionsAtPick = positionsAtPick
+          .map((position) => {
+            const count = allMocksAtPick.filter(
+              (m) => m.position === position
+            ).length
 
-          return {
-            position,
-            count,
-          }
-        })
+            return {
+              position,
+              count,
+            }
+          })
+          .sort((a, b) => b.count - a.count)
 
         const firstPlayerRefProp =
           orderIdx === 0 ? { ref: firstPlayerSnapRef } : {}
@@ -141,7 +155,7 @@ const Team = () => {
             {...firstPlayerRefProp}
             className='snap-always snap-start flex-shrink-0 h-screen w-screen flex'
           >
-            <div className='grid grid-cols-12 grid-rows-8 gap-4 w-screen'>
+            <div className='grid grid-cols-12 grid-rows-8 gap-1 w-screen'>
               <div id='team-header' className='col-span-12 flex flex-row'>
                 <div className='mr-8'>
                   <TeamIconById id={player.team_id} size={100} />
@@ -235,7 +249,13 @@ const Team = () => {
                         color: 'rgb(13,93,130)',
                       }}
                     >
-                      {player.name}
+                      {player.name}{' '}
+                      <span
+                        onClick={() => handlePlayerClick(player.player_id)}
+                        style={{ all: 'revert', fontSize: 12 }}
+                      >
+                        View
+                      </span>
                     </div>
                     <div
                       style={{
@@ -343,19 +363,21 @@ const Team = () => {
                 className='col-span-6 md:block md:col-span-3'
               >
                 <div className='p-2 relative border border-pink-300 rounded-lg m-2'>
-                  <div className='grid grid-rows-3 grid-overflow-auto'>
+                  <div className='grid grid-rows-6 grid-cols-6 grid-overflow-auto'>
                     {dataPlayersAtPosition.map((d) => {
                       return (
-                        <div>
-                          <span className='text-xs'>{d.name}</span>
-                          <span>
+                        <>
+                          <span className='col-span-4' style={{ fontSize: 10 }}>
+                            {d.name}
+                          </span>
+                          <span className='col-span-2'>
                             <ProgressBar
                               percent={Math.floor(
                                 (d.count / allMocksAtPosition.length) * 100
                               )}
                             />
                           </span>
-                        </div>
+                        </>
                       )
                     })}
                   </div>
@@ -386,7 +408,7 @@ const Team = () => {
                   </div>
                 </div>
               </div>
-              <div className='col-span-12 md:col-span-3 mt-4'>
+              <div className='col-span-12 md:col-span-3 mt-8'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-auto'>
                   {analyses.map((analysis, analysisIdx) => {
                     const firstAnalysisRefProp =
@@ -431,22 +453,22 @@ const Team = () => {
                                 >
                                   {analysis.analyst}
                                 </span>
-                                <span
-                                  style={{
-                                    fontFamily: 'Lato-Regular',
-                                    fontSize: 10,
-                                  }}
-                                >
-                                  <AnalystUrlDisplay url={analysis.url} />
-                                </span>
-                                <span
-                                  style={{
-                                    fontFamily: 'Lato-Regular',
-                                    fontSize: 10,
-                                  }}
-                                >
-                                  {format(analysis.date, 'M/dd/yyyy')}
-                                </span>
+                                <div className='flex flex-row items-center'>
+                                  <span
+                                    className='mr-2'
+                                    style={{ fontSize: 10 }}
+                                  >
+                                    <AnalystUrlDisplay url={analysis.url} />
+                                  </span>
+                                  <span
+                                    style={{
+                                      fontFamily: 'Lato-Regular',
+                                      fontSize: 10,
+                                    }}
+                                  >
+                                    {format(analysis.date, 'M/dd/yyyy')}
+                                  </span>
+                                </div>
                               </div>
                               {analysisIdx === 0 && analyses.length === 1 ? (
                                 <></>

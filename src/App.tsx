@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Team from './routes/Team'
-import Careers from './routes/Careers'
+import Player from './routes/Player'
 import Home from './routes/Home'
 import Navbar from './atoms/Navbar'
 import './App.css'
@@ -25,7 +25,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/team' element={<Team />} />
-        <Route path='/careers' element={<Careers />} />
+        <Route path='/player' element={<Player />} />
       </Routes>
     </>
   )

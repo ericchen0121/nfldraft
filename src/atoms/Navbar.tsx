@@ -44,9 +44,7 @@ const Navbar = () => {
               <a
                 className='flex-none text-xl font-semibold dark:text-white'
                 href='#'
-              >
-                <img src={Logo} style={{ height: 40, width: 40 }} />
-              </a>
+              ></a>
               <div className='ml-4 text-gray-200'>NFL Ultimate Draft</div>
             </div>
             <div className='sm:hidden'>

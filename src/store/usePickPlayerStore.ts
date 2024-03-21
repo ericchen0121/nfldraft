@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { Pick } from '../types/Pick'
-import { orderPlayers } from './orderPlayers'
+import { orderPlayers } from '../utilities/orderPlayers'
 
 interface GroupedRound {
   [key: number]: GroupedRoundPick

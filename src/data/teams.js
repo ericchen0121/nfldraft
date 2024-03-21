@@ -320,8 +320,8 @@ export default [
     name: 'Ravens',
     full_name: 'Baltimore Ravens',
     abbreviation: 'BAL',
-    primaryColor: '#A71930',
-    secondaryColor: '#000000',
+    primaryColor: '#241773',
+    secondaryColor: '#9E7C0C',
   },
   {
     team_id: 4,
