@@ -72,7 +72,7 @@ const Team = () => {
     scrollToFirstPlayer()
   }, [allMocksByTeam])
 
-  if (allMocksByTeam.length === 0) {
+  if (!roundPickTeams[1].find((x) => x.teamId === selectedTeamId)) {
     return <EmptyPlayersForTeam teamId={selectedTeamId} />
   }
 

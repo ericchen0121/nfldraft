@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
 import teams from '../data/teams'
 import TeamIconById from '../atoms/TeamIconById'
 import usePickPlayerStore from '../store/usePickPlayerStore'
 import { useNavigate } from 'react-router-dom'
-import Logo from '../assets/images/logo.jpg'
 import roundPickTeams from '../data/roundPickTeams'
 
 declare global {

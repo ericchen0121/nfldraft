@@ -17,11 +17,24 @@ import {
 } from 'recharts/types/component/DefaultTooltipContent'
 import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
+import AnalystUrlDisplay from '../atoms/AnalystUrlDisplay'
+import { format } from 'date-fns'
 
+interface Stat {
+  max: number
+  min: number
+  mode: number
+  average: number
+}
 const Player = () => {
   const { picks, selectedPlayerId, setPicks } = usePlayerStore()
   const [selectedPick, setSelectedPick] = useState<Pick | any>()
-
+  const [stats, setStats] = useState<Stat>({
+    max: -1,
+    min: -1,
+    mode: -1,
+    average: -1,
+  })
   const playerByPlayerIdQuery = usePlayerByPlayerIdQuery(selectedPlayerId) // https://tkdodo.eu/blog/react-query-and-type-script
   useEffect(() => {
     if (playerByPlayerIdQuery.data) {
@@ -29,9 +42,42 @@ const Player = () => {
     }
   }, [playerByPlayerIdQuery.data])
 
+  const minModeMaxAverage = (array: Pick[]): Stat => {
+    // Extract round_pick values from objects in the array
+    const roundPicks = array.map((obj) => obj.round_pick)
+
+    // Find the minimum value
+    const min = Math.min(...roundPicks)
+
+    // Find the mode value
+    let mode
+    let maxCount = 0
+    let counts = {}
+    for (const value of roundPicks) {
+      if (!counts[value]) {
+        counts[value] = 0
+      }
+      counts[value]++
+      if (counts[value] > maxCount) {
+        maxCount = counts[value]
+        mode = value
+      }
+    }
+
+    // Find the maximum value
+    const max = Math.max(...roundPicks)
+
+    // Find the average value
+    const sum = roundPicks.reduce((acc, val) => acc + val, 0)
+    const average = sum / roundPicks.length
+
+    return { min, mode, max, average }
+  }
+
   useEffect(() => {
     if (picks?.length) {
       setSelectedPick(picks[picks?.length - 1])
+      setStats(minModeMaxAverage(picks))
     }
   }, [picks])
 
@@ -46,7 +92,6 @@ const Player = () => {
   const CustomTooltip = ({
     active,
     payload,
-    label,
   }: TooltipProps<ValueType, NameType>) => {
     if (active) {
       const pick = payload?.[0].payload
@@ -159,7 +204,111 @@ const Player = () => {
           />
         </div>
       </div>
-      <div id='player-header' className='col-span-12 mt-4 row-span-2 mb-4'>
+      <div className='col-span-3 grid grid-rows-6 ml-1'>
+        <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+          Highest Pick
+        </div>
+        <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+          <div className='flex flex-row items-center justify-center'>
+            <div
+              className='mr-2'
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              {stats.min}
+            </div>
+            <div
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              PK
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='col-span-3 grid grid-rows-6'>
+        <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+          Lowest Pick
+        </div>
+        <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+          <div className='flex flex-row items-center justify-center'>
+            <div
+              className='mr-2'
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              {stats.max}
+            </div>
+            <div
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              PK
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='col-span-3 grid grid-rows-6'>
+        <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+          Most Picked
+        </div>
+        <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+          <div className='flex flex-row items-center justify-center'>
+            <div
+              className='mr-2'
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              {stats.mode}
+            </div>
+            <div
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              PK
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='col-span-3 grid grid-rows-6 mr-1'>
+        <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
+          Average Pick
+        </div>
+        <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+          <div className='flex flex-row items-center justify-center'>
+            <div
+              className='mr-2'
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              {stats.average.toFixed(2)}
+            </div>
+            <div
+              style={{
+                fontFamily: 'BarlowCondensed-Regular',
+                fontSize: 28,
+              }}
+            >
+              PK
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='chart-container' className='col-span-12 mt-4 row-span-2 mb-4'>
         <ResponsiveContainer width='100%' height={'100%'}>
           <LineChart
             width={200}
@@ -219,7 +368,7 @@ const Player = () => {
       </div>
       {selectedPick && (
         <>
-          <div className='col-span-3'>
+          <div id='selected-pick-team' className='col-span-3'>
             <TeamIconById id={selectedPick.team_id} size={80} />
             <div className='grid grid-rows-2 mr-4'>
               <div
@@ -265,7 +414,7 @@ const Player = () => {
               </div>
             </div>
           </div>
-          <div className='col-span-9 mr-4'>
+          <div id='selected-pick-analysis' className='col-span-9 mr-4'>
             <span
               style={{
                 fontFamily: 'Lato-Regular',
@@ -274,6 +423,29 @@ const Player = () => {
             >
               {selectedPick.analysis}
             </span>
+            <div className='flex flex-col mt-4'>
+              <span
+                style={{
+                  fontFamily: 'Lato-Regular',
+                  fontSize: 12,
+                }}
+              >
+                {selectedPick.analyst}
+              </span>
+              <div className='flex flex-row items-center'>
+                <span className='mr-2' style={{ fontSize: 10 }}>
+                  <AnalystUrlDisplay url={selectedPick.url} />
+                </span>
+                <span
+                  style={{
+                    fontFamily: 'Lato-Regular',
+                    fontSize: 10,
+                  }}
+                >
+                  {format(selectedPick.date, 'M/dd/yyyy')}
+                </span>
+              </div>
+            </div>
           </div>
         </>
       )}
