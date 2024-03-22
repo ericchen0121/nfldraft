@@ -46,13 +46,12 @@ const Player = () => {
   const player = picks?.[0]
 
   useEffect(() => {
-    if (player && selectedPlayerId) {
+    if (selectedPlayerId) {
       analytics.track('Player View', {
         playerId: selectedPlayerId,
-        player: player?.name,
       })
     }
-  }, [player])
+  }, [selectedPlayerId])
 
   const minModeMaxAverage = (array: Pick[]): Stat => {
     // Extract round_pick values from objects in the array

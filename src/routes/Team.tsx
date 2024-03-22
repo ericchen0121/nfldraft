@@ -302,12 +302,12 @@ const Team = () => {
               </div>
               <div
                 id='stats1-header'
-                className='col-span-6 md:col-span-3 grid grid-rows-6 ml-1'
+                className='col-span-6 md:col-span-3 grid grid-rows-5 ml-1'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Player Selection %
                 </div>
-                <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+                <div className='row-span-4 p-1 relative border border-pink-300 rounded-lg'>
                   <div className='text-slate-700 flex flex-row items-center justify-center h-full'>
                     <div className='text-4xl mr-2'>
                       {Math.floor(
@@ -337,12 +337,12 @@ const Team = () => {
               </div>
               <div
                 id='stats2-header'
-                className='col-span-6 md:col-span-3 grid grid-rows-6 mr-1 md:mr-0'
+                className='col-span-6 md:col-span-3 grid grid-rows-5 mr-1 md:mr-0'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Position Selection %
                 </div>
-                <div className='row-span-5 p-1 relative border border-pink-300 rounded-lg'>
+                <div className='row-span-4 p-1 relative border border-pink-300 rounded-lg'>
                   <div className='text-slate-700 flex flex-row items-center justify-center h-full'>
                     <span className='text-4xl mr-2'>
                       {Math.floor(
@@ -373,7 +373,7 @@ const Team = () => {
               </div>
               <div
                 id='stats3-header'
-                className='col-span-6 md:block md:col-span-3 grid grid-rows-5 ml-1 md:ml-0'
+                className='col-span-6 md:col-span-3 grid grid-rows-5 ml-1 md:ml-0'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Relative Selection: Players at Position
@@ -401,7 +401,7 @@ const Team = () => {
               </div>
               <div
                 id='stats4-header'
-                className='col-span-6 md:block md:col-span-3 grid grid-rows-5 mr-1'
+                className='col-span-6 md:col-span-3 grid grid-rows-5 mr-1'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Relative Selection: Position
