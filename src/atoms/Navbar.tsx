@@ -37,7 +37,7 @@ const Navbar = () => {
         aria-label='Global'
       >
         <div className='relative sm:flex sm:items-center'>
-          <div className='flex items-center justify-between'>
+          <div className='flex items-center justify-between whitespace-nowrap'>
             <div className='flex flex-row items-center'>
               <a
                 className='flex-none text-xl font-semibold dark:text-white'

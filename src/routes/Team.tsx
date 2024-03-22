@@ -262,7 +262,11 @@ const Team = () => {
                       {player.name}{' '}
                       <span
                         onClick={() => handlePlayerClick(player.player_id)}
-                        style={{ all: 'revert', fontSize: 12 }}
+                        style={{
+                          all: 'revert',
+                          fontSize: 12,
+                          cursor: 'pointer',
+                        }}
                       >
                         View
                       </span>
