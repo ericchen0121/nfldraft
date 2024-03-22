@@ -19,6 +19,7 @@ import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
 import AnalystUrlDisplay from '../atoms/AnalystUrlDisplay'
 import { format } from 'date-fns'
+import analytics from '../utilities/analytics'
 
 interface Stat {
   max: number
@@ -41,6 +42,17 @@ const Player = () => {
       setPicks(playerByPlayerIdQuery.data)
     }
   }, [playerByPlayerIdQuery.data])
+
+  const player = picks?.[0]
+
+  useEffect(() => {
+    if (player && selectedPlayerId) {
+      analytics.track('Player View', {
+        playerId: selectedPlayerId,
+        player: player?.name,
+      })
+    }
+  }, [player])
 
   const minModeMaxAverage = (array: Pick[]): Stat => {
     // Extract round_pick values from objects in the array
@@ -81,7 +93,6 @@ const Player = () => {
     }
   }, [picks])
 
-  const player = picks?.[0]
   const colors = selectedPick
     ? teamColors(selectedPick.team_id)
     : ['lightBlue', 'darkBlue']

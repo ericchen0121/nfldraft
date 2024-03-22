@@ -5,6 +5,7 @@ import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
 import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
 import roundPickTeams from '../data/roundPickTeams'
+import teams from '../data/teams'
 import EmptyPlayersForTeam from '../molecules/EmptyPlayersForTeam'
 import ProgressBar from '../atoms/ProgressBar'
 import AnalystUrlDisplay from '../atoms/AnalystUrlDisplay'
@@ -23,9 +24,11 @@ const Team = () => {
   } = usePickPlayerStore()
 
   useEffect(() => {
-    analytics.track('Team', { test: 'valid' })
-    analytics.page()
-  }, [])
+    analytics.track('Team View', {
+      teamId: selectedTeamId,
+      teamName: teams.find((t) => t.team_id === selectedTeamId)?.full_name,
+    })
+  }, [selectedTeamId])
 
   const { setSelectedPlayerId } = usePlayerStore()
 

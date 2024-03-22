@@ -5,7 +5,7 @@ const analytics = Analytics({
   app: 'NFL Ultimate Mock Draft',
   plugins: [
     mixpanelPlugin({
-      token: process.env.MIXPANEL_TOKEN,
+      token: process.env.REACT_APP_MIXPANEL_TOKEN,
     }),
   ],
 })
