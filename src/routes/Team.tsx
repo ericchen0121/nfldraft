@@ -10,6 +10,8 @@ import ProgressBar from '../atoms/ProgressBar'
 import AnalystUrlDisplay from '../atoms/AnalystUrlDisplay'
 import { format } from 'date-fns'
 import usePlayerStore from '../store/usePlayerStore'
+import analytics from '../utilities/analytics'
+
 const Team = () => {
   const navigate = useNavigate()
   // scroll snapping with tailwind: www.youtube.com/watch?v=iVTjsc4B9-I
@@ -19,6 +21,11 @@ const Team = () => {
     selectedTeamId,
     setPlayers,
   } = usePickPlayerStore()
+
+  useEffect(() => {
+    analytics.track('Team', { test: 'valid' })
+    analytics.page()
+  }, [])
 
   const { setSelectedPlayerId } = usePlayerStore()
 
@@ -288,7 +295,7 @@ const Team = () => {
               </div>
               <div
                 id='stats1-header'
-                className='col-span-6 md:col-span-3 grid grid-rows-6'
+                className='col-span-6 md:col-span-3 grid grid-rows-6 ml-1'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Player Selection %
@@ -323,7 +330,7 @@ const Team = () => {
               </div>
               <div
                 id='stats2-header'
-                className='col-span-6 md:col-span-3 grid grid-rows-6'
+                className='col-span-6 md:col-span-3 grid grid-rows-6 mr-1 md:mr-0'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Position Selection %
@@ -359,14 +366,14 @@ const Team = () => {
               </div>
               <div
                 id='stats3-header'
-                className='col-span-6 md:block md:col-span-3 grid grid-rows-5'
+                className='col-span-6 md:block md:col-span-3 grid grid-rows-5 ml-1 md:ml-0'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Relative Selection: Players at Position
                 </div>
                 <div className='row-span-4 p-1 relative border border-pink-300 rounded-lg'>
                   <div className='grid grid-rows-6 grid-cols-6 grid-overflow-auto'>
-                    {dataPlayersAtPosition.slice(0, 5).map((d) => {
+                    {dataPlayersAtPosition.slice(0, 4).map((d) => {
                       return (
                         <>
                           <span className='col-span-4' style={{ fontSize: 10 }}>
@@ -387,14 +394,14 @@ const Team = () => {
               </div>
               <div
                 id='stats4-header'
-                className='col-span-6 md:block md:col-span-3 grid grid-rows-5'
+                className='col-span-6 md:block md:col-span-3 grid grid-rows-5 mr-1'
               >
                 <div className='row-span-1 ml-1' style={{ fontSize: 8 }}>
                   Relative Selection: Position
                 </div>
                 <div className='row-span-4 p-1 relative border border-pink-300 rounded-lg'>
                   <div className='grid grid-rows-6 grid-cols-6 grid-overflow-auto'>
-                    {dataPositionsAtPick.slice(0, 5).map((d) => {
+                    {dataPositionsAtPick.slice(0, 4).map((d) => {
                       return (
                         <>
                           <span className='text-xs col-span-1'>
