@@ -434,6 +434,9 @@ const Team = () => {
                       analysisIdx === 0 && orderIdx === 0
                         ? { ref: firstAnalysisSnapRef }
                         : {}
+
+                    if (!analysis.analysis) return null
+
                     return (
                       <div
                         {...firstAnalysisRefProp}
