@@ -66,7 +66,7 @@ const Home = () => {
           <div>
             <img
               style={{ width: 48, height: 48, marginLeft: 12, marginRight: 12 }}
-              src={`https://static.www.nfl.com/image/private/f_png,q_100,h_120,w_120,c_fill,g_face:center,f_auto/%7B%7Binstance%7D%7D/god-draft-headshots/2024/${pick?.image?.nfl_id}`}
+              src={`https://static.www.nfl.com/image/private/f_png,q_100,h_120,w_120,c_fill,g_face:center,f_auto${pick?.image?.nfl_path}`}
             />
           </div>
           <div style={{ width: 250 }}>

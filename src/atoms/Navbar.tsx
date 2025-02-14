@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import teams from '../data/teams'
 import TeamIconById from '../atoms/TeamIconById'
 import usePickPlayerStore from '../store/usePickPlayerStore'
+import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
 import { useNavigate } from 'react-router-dom'
 import roundPickTeams from '../data/roundPickTeams'
 
@@ -17,8 +19,15 @@ const Navbar = () => {
     [16, 24],
     [24, 32],
   ]
-  const { setSelectedTeamId } = usePickPlayerStore()
+  const { selectedTeamId, setSelectedTeamId, setPlayers } = usePickPlayerStore()
+  const playerByTeamIdQuery = usePlayerByTeamIdQuery(selectedTeamId)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (playerByTeamIdQuery.data) {
+      setPlayers(playerByTeamIdQuery.data)
+    }
+  }, [playerByTeamIdQuery.data])
 
   const closeTopNavOnMobile = () => {
     window.$hsCollapseCollection[0]?.element?.hide()
@@ -26,7 +35,7 @@ const Navbar = () => {
 
   const handlePressTeam = (teamId: number) => {
     setSelectedTeamId(teamId)
-    navigate('/team')
+    navigate('/team-overview')
     closeTopNavOnMobile()
   }
 

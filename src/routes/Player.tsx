@@ -20,6 +20,11 @@ import teamColors from '../utilities/teamColors'
 import AnalystUrlDisplay from '../atoms/AnalystUrlDisplay'
 import { format } from 'date-fns'
 import analytics from '../utilities/analytics'
+import axios from 'axios'
+import teams from '../data/teams'
+import Markdown from 'react-markdown'
+import style from '../markdown-styles.module.css'
+import remarkGfm from 'remark-gfm'
 
 interface Stat {
   max: number
@@ -30,6 +35,8 @@ interface Stat {
 const Player = () => {
   const { picks, selectedPlayerId, setPicks } = usePlayerStore()
   const [selectedPick, setSelectedPick] = useState<Pick | any>()
+  const [AIAnalysis, setAIAnalysis] = useState('')
+
   const [stats, setStats] = useState<Stat>({
     max: -1,
     min: -1,
@@ -91,6 +98,48 @@ const Player = () => {
       setStats(minModeMaxAverage(picks))
     }
   }, [picks])
+
+  const handleAIAnalysis = (pick) => {
+    const name = pick.name
+    const team = teams.find((t) => t.team_id === pick.team_id)?.full_name
+    const query = `How does ${name} complement the 2024 ${team} needs`
+
+    // const query = `draft profile scouting report for 2024 prospect ${name}`
+    // const query = `in the upcoming nfl draft, list 5 attributes of ${name} that make him a fit for the ${team}`
+
+    // const query = `What are the draft profile scouting report strengths and weaknesses for ${pick.name}?`
+    const options = {
+      method: 'POST',
+      url: 'https://api.perplexity.ai/chat/completions',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authorization:
+          'Bearer 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',
+      },
+      data: {
+        model: 'mistral-7b-instruct', // 'sonar-medium-online', //,
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Respond in .md, with paragraphs between each point, and bold titles for each point. Be concise',
+            // 'limit your response to the only the 5 attributes, no descriptions, and commas between each attribute. Take your output and only respond with the titles of the 5 attributes.',
+          },
+          { role: 'user', content: query },
+        ],
+      },
+    }
+
+    axios
+      .request(options)
+      .then((response) => {
+        setAIAnalysis(response.data.choices[0].message.content)
+      })
+      .catch(function (error) {
+        console.error(error)
+      })
+  }
 
   const colors = selectedPick
     ? teamColors(selectedPick.team_id)
@@ -209,7 +258,7 @@ const Player = () => {
               zIndex: 3,
               height: '100%',
             }}
-            src={`https://static.www.nfl.com/image/private/f_png,q_100,h_400,w_400,c_fill,g_face:center,f_auto/%7B%7Binstance%7D%7D/god-draft-headshots/2024/${player?.image?.nfl_id}`}
+            src={`https://static.www.nfl.com/image/private/f_png,q_100,h_400,w_400,c_fill,g_face:center,f_auto${player?.image?.nfl_path}`}
           />
         </div>
       </div>
@@ -457,6 +506,23 @@ const Player = () => {
             </div>
           </div>
         </>
+      )}
+      {false && (
+        <div id='ai-generated-analysis' className='col-span-12 mt-32'>
+          <div className='col-span-3'>
+            <button onClick={() => handleAIAnalysis(selectedPick)}>
+              Generate
+            </button>
+          </div>
+          <div className='col-span-9'>
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              className={style.reactMarkDown}
+            >
+              {AIAnalysis}
+            </Markdown>
+          </div>
+        </div>
       )}
     </div>
   )

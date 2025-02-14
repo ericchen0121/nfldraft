@@ -296,7 +296,7 @@ const Team = () => {
                       zIndex: 3,
                       height: '100%',
                     }}
-                    src={`https://static.www.nfl.com/image/private/f_png,q_100,h_400,w_400,c_fill,g_face:center,f_auto/%7B%7Binstance%7D%7D/god-draft-headshots/2024/${player?.image?.nfl_id}`}
+                    src={`https://static.www.nfl.com/image/private/f_png,q_100,h_400,w_400,c_fill,g_face:center,f_auto${player?.image?.nfl_path}`}
                   />
                 </div>
               </div>
@@ -329,7 +329,7 @@ const Team = () => {
                           height: 40,
                           borderRadius: '50%',
                         }}
-                        src={`https://static.www.nfl.com/image/private/f_png,q_100,h_400,w_400,c_fill,g_face:center,f_auto/%7B%7Binstance%7D%7D/god-draft-headshots/2024/${player?.image?.nfl_id}`}
+                        src={`https://static.www.nfl.com/image/private/f_png,q_100,h_400,w_400,c_fill,g_face:center,f_auto${player?.image?.nfl_path}`}
                       />
                     </div>
                   </div>
@@ -429,87 +429,88 @@ const Team = () => {
               </div>
               <div className='col-span-12 md:col-span-3 mt-2'>
                 <div className='snap-x snap-mandatory w-screen flex overflow-y-auto'>
-                  {analyses.map((analysis, analysisIdx) => {
-                    const firstAnalysisRefProp =
-                      analysisIdx === 0 && orderIdx === 0
-                        ? { ref: firstAnalysisSnapRef }
-                        : {}
+                  {analyses
+                    .filter((a) => a.analysis)
+                    .map((analysis, analysisIdx) => {
+                      const firstAnalysisRefProp =
+                        analysisIdx === 0 && orderIdx === 0
+                          ? { ref: firstAnalysisSnapRef }
+                          : {}
 
-                    if (!analysis.analysis) return null
-
-                    return (
-                      <div
-                        {...firstAnalysisRefProp}
-                        className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'
-                      >
-                        <div className='p-8 relative border border-sky-400 rounded-2xl m-2'>
-                          <span
-                            style={{
-                              fontFamily: 'Lato-Italic',
-                              fontSize: 40,
-                              lineHeight: 0.7,
-                              color: colors[1],
-                              position: 'absolute',
-                              top: 28,
-                              left: 8,
-                            }}
-                          >
-                            "
-                          </span>
-                          <span
-                            style={{
-                              fontFamily: 'Lato-Regular',
-                              fontSize: 15,
-                            }}
-                          >
-                            {analysis.analysis}
-                          </span>
-                          <footer className='mt-4'>
-                            <div className='flex flex-row justify-between'>
-                              <div className='flex flex-col'>
-                                <span
-                                  style={{
-                                    fontFamily: 'Lato-Regular',
-                                    fontSize: 12,
-                                  }}
-                                >
-                                  {analysis.analyst}
-                                </span>
-                                <div className='flex flex-row items-center'>
+                      return (
+                        <div
+                          {...firstAnalysisRefProp}
+                          className='snap-always flex-shrink-0 snap-center w-screen md:w-1/3 lg:w-1/4 flex'
+                        >
+                          <div className='p-8 relative border border-sky-400 rounded-2xl m-2'>
+                            <span
+                              style={{
+                                fontFamily: 'Lato-Italic',
+                                fontSize: 40,
+                                lineHeight: 0.7,
+                                color: colors[1],
+                                position: 'absolute',
+                                top: 28,
+                                left: 8,
+                              }}
+                            >
+                              "
+                            </span>
+                            <span
+                              style={{
+                                fontFamily: 'Lato-Regular',
+                                fontSize: 15,
+                              }}
+                            >
+                              {analysis.analysis}
+                            </span>
+                            <footer className='mt-4'>
+                              <div className='flex flex-row justify-between'>
+                                <div className='flex flex-col'>
                                   <span
-                                    className='mr-2'
-                                    style={{ fontSize: 10 }}
+                                    style={{
+                                      fontFamily: 'Lato-Regular',
+                                      fontSize: 12,
+                                    }}
                                   >
-                                    <AnalystUrlDisplay url={analysis.url} />
+                                    {analysis.analyst}
                                   </span>
+                                  <div className='flex flex-row items-center'>
+                                    <span
+                                      className='mr-2'
+                                      style={{ fontSize: 10 }}
+                                    >
+                                      <AnalystUrlDisplay url={analysis.url} />
+                                    </span>
+                                    <span
+                                      style={{
+                                        fontFamily: 'Lato-Regular',
+                                        fontSize: 10,
+                                      }}
+                                    >
+                                      {format(analysis.date, 'M/dd/yyyy')}
+                                    </span>
+                                  </div>
+                                </div>
+                                {analysisIdx === 0 && analyses.length === 1 ? (
+                                  <></>
+                                ) : (
                                   <span
                                     style={{
                                       fontFamily: 'Lato-Regular',
                                       fontSize: 10,
                                     }}
                                   >
-                                    {format(analysis.date, 'M/dd/yyyy')}
+                                    {analysisIdx + 1}/
+                                    {analyses.filter((a) => a.analysis).length}
                                   </span>
-                                </div>
+                                )}
                               </div>
-                              {analysisIdx === 0 && analyses.length === 1 ? (
-                                <></>
-                              ) : (
-                                <span
-                                  style={{
-                                    fontFamily: 'Lato-Regular',
-                                    fontSize: 10,
-                                  }}
-                                >
-                                  {analysisIdx + 1}/{analyses.length}
-                                </span>
-                              )}
-                            </div>
-                          </footer>
+                            </footer>
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
+                      )
+                    })}
                 </div>
               </div>
             </div>

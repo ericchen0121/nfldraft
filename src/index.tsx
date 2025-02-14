@@ -10,6 +10,7 @@ import './fonts/BarlowCondensed-Medium.ttf'
 import './fonts/BarlowCondensed-Regular.ttf'
 import './fonts/Lato-Regular.ttf'
 import './fonts/Lato-Italic.ttf'
+import { Theme } from '@radix-ui/themes'
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
@@ -18,7 +19,9 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <Router>
       <React.StrictMode>
-        <App />
+        <Theme>
+          <App />
+        </Theme>
       </React.StrictMode>
     </Router>
   </QueryClientProvider>
