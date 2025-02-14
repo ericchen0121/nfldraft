@@ -1,5 +1,5 @@
 export interface NFLImageObject {
-  nfl_id: string
+  nfl_path: string
 }
 
 export interface Pick {
