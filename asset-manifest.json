@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/nfldraft/static/css/main.9b82cb09.css",
-    "main.js": "/nfldraft/static/js/main.c3a7f309.js",
+    "main.css": "/nfldraft/static/css/main.11fe15b0.css",
+    "main.js": "/nfldraft/static/js/main.eed1001c.js",
     "static/js/453.673c1f3a.chunk.js": "/nfldraft/static/js/453.673c1f3a.chunk.js",
     "static/media/BarlowCondensed-Bold.ttf": "/nfldraft/static/media/BarlowCondensed-Bold.ca168dbe270fba68a7f3.ttf",
     "static/media/BarlowCondensed-Medium.ttf": "/nfldraft/static/media/BarlowCondensed-Medium.2afd924bd5156ee485b9.ttf",
@@ -9,12 +9,12 @@
     "static/media/Lato-Italic.ttf": "/nfldraft/static/media/Lato-Italic.a9f3ee269217f44df65f.ttf",
     "static/media/Lato-Regular.ttf": "/nfldraft/static/media/Lato-Regular.9d883d540ee2b4de8024.ttf",
     "index.html": "/nfldraft/index.html",
-    "main.9b82cb09.css.map": "/nfldraft/static/css/main.9b82cb09.css.map",
-    "main.c3a7f309.js.map": "/nfldraft/static/js/main.c3a7f309.js.map",
+    "main.11fe15b0.css.map": "/nfldraft/static/css/main.11fe15b0.css.map",
+    "main.eed1001c.js.map": "/nfldraft/static/js/main.eed1001c.js.map",
     "453.673c1f3a.chunk.js.map": "/nfldraft/static/js/453.673c1f3a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9b82cb09.css",
-    "static/js/main.c3a7f309.js"
+    "static/css/main.11fe15b0.css",
+    "static/js/main.eed1001c.js"
   ]
 }
