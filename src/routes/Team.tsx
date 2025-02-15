@@ -412,10 +412,10 @@ const Team = () => {
                     {dataPositionsAtPick.slice(0, 4).map((d) => {
                       return (
                         <>
-                          <span className='text-xs col-span-1'>
+                          <span className='text-xs col-span-2'>
                             {d.position}
                           </span>
-                          <span className='col-span-5 flex items-center'>
+                          <span className='col-span-4 flex items-center'>
                             <ProgressBar
                               percent={Math.floor(
                                 (d.count / allMocksAtPick.length) * 100
