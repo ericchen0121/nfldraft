@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import usePickPlayerStore from '../store/usePickPlayerStore'
 import TeamIconById from '../atoms/TeamIconById'
 import teamColors from '../utilities/teamColors'
-import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
+import usePlayerByTeamIdAndYearQuery from '../hooks/usePlayerByTeamIdAndYearQuery'
 import roundPickTeams from '../data/roundPickTeams'
 import teams from '../data/teams'
 import EmptyPlayersForTeam from '../molecules/EmptyPlayersForTeam'
@@ -70,13 +70,14 @@ const Team = () => {
 
     setScrolledToFirst(true)
   }
-  const playerByTeamIdQuery = usePlayerByTeamIdQuery(selectedTeamId) // https://tkdodo.eu/blog/react-query-and-type-script
+  const playerByTeamIdAndYearQuery =
+    usePlayerByTeamIdAndYearQuery(selectedTeamId) // https://tkdodo.eu/blog/react-query-and-type-script
 
   useEffect(() => {
-    if (playerByTeamIdQuery.data) {
-      setPlayers(playerByTeamIdQuery.data)
+    if (playerByTeamIdAndYearQuery.data) {
+      setPlayers(playerByTeamIdAndYearQuery.data)
     }
-  }, [playerByTeamIdQuery.data])
+  }, [playerByTeamIdAndYearQuery.data])
 
   useEffect(() => {
     scrollToFirstPlayer()

@@ -59,7 +59,7 @@ const usePickPlayerStore = create<PickPlayerStore>((set) => ({
   roundPick: 1,
   players: [],
   order: [],
-  selectedTeamId: 6,
+  selectedTeamId: 31,
   playersByRoundAndPick: {},
   setRound: (round: number) => set(() => ({ round })),
   setRoundPick: (roundPick: number) => set(() => ({ roundPick })),

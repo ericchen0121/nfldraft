@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import roundPickTeams from '../data/roundPickTeams'
 import teamAbbreviationToId from '../utilities/teamAbbreviationToId'
 import usePickPlayerStore from '../store/usePickPlayerStore'
-import usePlayerByTeamIdQuery from '../hooks/usePlayerByTeamIdQuery'
+import usePlayerByTeamIdAndYearQuery from '../hooks/usePlayerByTeamIdAndYearQuery'
 import { Pick } from '../types/Pick'
 
 interface IncludesDate {
@@ -27,17 +27,17 @@ const Home = () => {
     usePickPlayerStore()
   const abbreviation: string = roundPickTeams[1][roundPick - 1].teamAbbreviation
   const teamId = teamAbbreviationToId(abbreviation)
-  const playerByTeamIdQuery = usePlayerByTeamIdQuery(teamId) // https://tkdodo.eu/blog/react-query-and-type-script
+  const playerByTeamIdAndYearQuery = usePlayerByTeamIdAndYearQuery(teamId) // https://tkdodo.eu/blog/react-query-and-type-script
 
   const mockPicks = players
     .filter((m) => m?.round_pick === roundPick)
     .sort(sortArrayValuesByDate)
 
   useEffect(() => {
-    if (playerByTeamIdQuery.isSuccess) {
-      setPlayers(playerByTeamIdQuery.data)
+    if (playerByTeamIdAndYearQuery.isSuccess) {
+      setPlayers(playerByTeamIdAndYearQuery.data)
     }
-  }, [playerByTeamIdQuery.isSuccess])
+  }, [playerByTeamIdAndYearQuery.isSuccess])
 
   const iconByAbbreviation = (abbrev: string) => {
     const abbreviationToUse = abbrev === 'JAC' ? 'JAX' : abbrev

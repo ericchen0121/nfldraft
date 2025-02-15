@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { Pick } from '../types/Pick'
 
-const usePlayerByTeamIdQuery = (
+const usePlayerByTeamIdAndYearQuery = (
   teamId: Number | undefined,
   options: any = {}
 ) => {
@@ -28,4 +28,4 @@ const usePlayerByTeamIdQuery = (
   })
 }
 
-export default usePlayerByTeamIdQuery
+export default usePlayerByTeamIdAndYearQuery
